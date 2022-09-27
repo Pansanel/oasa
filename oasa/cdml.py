@@ -17,7 +17,7 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 import xml.dom.minidom as dom
 
@@ -107,7 +107,7 @@ def cm_to_float_coord( x):
 try:
   from io import StringIO
 except ImportError:
-  from StringIO import StringIO
+  from io import StringIO
 
 reads_text = 1
 reads_files = 1

@@ -17,7 +17,7 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 import re
 
@@ -203,7 +203,7 @@ class linear_formula( object):
   def expand_abbrevs( self, text):
     # at first sort the text according to length, so that the longest are expanded first
     # (MMTr and not Tr)
-    keys = sorted([(len( k), k) for k in name_to_smiles.keys()], reverse=True)
+    keys = sorted([(len( k), k) for k in list(name_to_smiles.keys())], reverse=True)
     for l, key in keys:
       val = name_to_smiles[ key]
       text = text.replace( key, "(!%s)" % val)

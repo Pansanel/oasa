@@ -17,7 +17,7 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 import copy
 import math
@@ -305,7 +305,7 @@ class molecule(graph.graph):
       if not b.aromatic:
         self.temporarily_disconnect_edge( b)
     self.temporarily_strip_bridge_edges()
-    ring_clusters = map( list, [sub for sub in self.get_connected_components() if len( sub) > 1])
+    ring_clusters = list(map( list, [sub for sub in self.get_connected_components() if len( sub) > 1]))
     self.reconnect_temporarily_disconnected_edges()
     # now proceed in localizing double bonds in each one
     for cluster in ring_clusters:
@@ -342,7 +342,7 @@ class molecule(graph.graph):
           ok = True
           if not nrex:
             # there are no exposed vertices
-            for work_v, work_n in mate.items():
+            for work_v, work_n in list(mate.items()):
               if work_n != 0:
                 work_e = work_v.get_edge_leading_to( work_n)
                 work_e.properties_['original'].order = 2
@@ -385,8 +385,8 @@ class molecule(graph.graph):
     they will be properly localized but marked as non-aromatic"""
     erings = self.get_smallest_independent_cycles_e()
     # filter off rings without aromatic bonds
-    erings = filter( lambda x: len( [b for b in x if b.aromatic]), erings)
-    rings = map( self.edge_subgraph_to_vertex_subgraph, erings)
+    erings = [x for x in erings if len( [b for b in x if b.aromatic])]
+    rings = list(map( self.edge_subgraph_to_vertex_subgraph, erings))
     # sort rings
     rings.sort( lambda x,y: len(y)%2 - len(x)%2) # odd size rings first
     last_rings = []
@@ -691,7 +691,7 @@ class molecule(graph.graph):
       vsset = frozenset( vs)
       if vsset not in yielded:
         if self._freesites_match( other, thread):
-          yield [v for v in vs if not 'implicit_hydrogen' in v.properties_.keys()]
+          yield [v for v in vs if not 'implicit_hydrogen' in list(v.properties_.keys())]
       yielded.add( vsset)
 
     if auto_cleanup:
@@ -705,7 +705,7 @@ class molecule(graph.graph):
         v.free_sites = v.properties_['old_free_sites']
         del v.properties_['old_free_sites']
     # finally we remove the added implicit hydrogens
-    hs = [v for v in self.vertices if 'implicit_hydrogen' in v.properties_.keys()]
+    hs = [v for v in self.vertices if 'implicit_hydrogen' in list(v.properties_.keys())]
     for v in hs:
       del v.properties_['implicit_hydrogen']
       self.remove_vertex( v)
@@ -714,7 +714,7 @@ class molecule(graph.graph):
     for v in other.vertices:
       if 'implicit_hydrogen' not in v.properties_:
         v.explicit_hydrogens = len( [h for h in v.neighbors if 'implicit_hydrogen' in h.properties_])
-    hs = [v for v in other.vertices if 'implicit_hydrogen' in v.properties_.keys()]
+    hs = [v for v in other.vertices if 'implicit_hydrogen' in list(v.properties_.keys())]
     for v in hs:
       del v.properties_['implicit_hydrogen']
       other.remove_vertex( v)
@@ -773,7 +773,7 @@ class molecule(graph.graph):
         else:
           pass
 
-      threads = [i for i in v.properties_['subsearch'].keys() if i >= thread]
+      threads = [i for i in list(v.properties_['subsearch'].keys()) if i >= thread]
       if thread in threads:
         threads.remove( thread)
         yield thread

@@ -181,7 +181,7 @@ def _myisustr(obj):
   if sys.version_info[0] > 2:
     return isinstance(obj, str)
   else:
-    return isinstance(obj, basestring) or isinstance(obj, unicode)
+    return isinstance(obj, str) or isinstance(obj, str)
 
 
 class formula_dict( dict):
@@ -195,7 +195,7 @@ class formula_dict( dict):
     if _myisustr(form):
       self.read_formula_string( form)
     elif isinstance(form, dict):
-      for key, val in form.items():
+      for key, val in list(form.items()):
         if key in periodic_table and isinstance(val, int):
           self[ key] = val
         else:
@@ -236,7 +236,7 @@ class formula_dict( dict):
     if not isinstance(other, int):
       raise TypeError("formula_dict can be only multiplied by an integer")
     res = formula_dict()
-    for key in self.keys():
+    for key in list(self.keys()):
       res[key] = other * self[key]
     return res
 

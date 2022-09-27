@@ -22,7 +22,7 @@
 Suitable for analysis of chemical problems.
 """
 
-from __future__ import print_function
+
 
 import copy
 import time
@@ -301,7 +301,7 @@ class graph(object):
     self.disconnect( v1, v2)
     ps = [i for i in self.get_connected_components()]
     self.add_edge( v1, v2, e=e)
-    return map( len, ps)
+    return list(map( len, ps))
 
 
   ## ANALYSIS
@@ -445,7 +445,7 @@ class graph(object):
       v = to_go.pop()
       cycles = self._get_cycles_for_vertex( v, to_reach=v)
       all_cycles += cycles
-      to_go -= set(ver for ver in set().union(*map(self.edge_subgraph_to_vertex_subgraph, cycles))
+      to_go -= set(ver for ver in set().union(*list(map(self.edge_subgraph_to_vertex_subgraph, cycles)))
                            if ver.degree == 2)
     all_cycles = set( map( frozenset, all_cycles))
 
@@ -464,7 +464,7 @@ class graph(object):
       v = to_go.pop()
       cycles = self._get_cycles_for_vertex( v, to_reach=v)
       all_cycles += cycles
-      to_go -= set(ver for ver in set().union(*map(self.edge_subgraph_to_vertex_subgraph, cycles))
+      to_go -= set(ver for ver in set().union(*list(map(self.edge_subgraph_to_vertex_subgraph, cycles)))
                            if ver.degree == 2)
     all_cycles = set( map( frozenset, all_cycles))
     return all_cycles
@@ -556,7 +556,7 @@ class graph(object):
               path.update( now)
             if path:
               paths.add( frozenset( path))
-          l = max( map( len, paths))
+          l = max( list(map( len, paths)))
           path = [p for p in paths if len( p) == l][0]
           # now mark them for disconnection
           v1 = set( path).pop()
@@ -588,7 +588,7 @@ class graph(object):
       # now try to remove the biggest ones
       while len( cs) - ncycles > 0:
         c = set( cs.pop( -1))
-        if not c <= set().union(*map(set, cs)):
+        if not c <= set().union(*list(map(set, cs))):
           cs.insert( 0, c)
       cycles = set( [frozenset( _c) for _c in cs])
 
@@ -668,11 +668,11 @@ class graph(object):
     use get_all_cycles_e to get the edge variant, which is better for building new
     graphs as the mapping edges => vertices is unambiguous, while edges=>vertices=>edges might
     include some more edges"""
-    return map( self.edge_subgraph_to_vertex_subgraph, self.get_all_cycles_e_old())
+    return list(map( self.edge_subgraph_to_vertex_subgraph, self.get_all_cycles_e_old()))
 
 
   def get_all_cycles_e( self):
-    return map( self.vertex_subgraph_to_edge_subgraph, self.get_all_cycles())
+    return list(map( self.vertex_subgraph_to_edge_subgraph, self.get_all_cycles()))
 
 
   def get_all_cycles( self):
@@ -998,7 +998,7 @@ class graph(object):
     for i in range( num):
       self.add_vertex( self.create_vertex())
     for line in f:
-      i1, i2 = map( int, line.split())
+      i1, i2 = list(map( int, line.split()))
       self.add_edge( self.vertices[i1], self.vertices[i2])
 
   def path_exists( self, a1, a2):
@@ -1101,7 +1101,7 @@ class graph(object):
     while nrex > 1:
       #print("NREEEEEEX", nrex)
       #self._print_mate( mate)
-      exposed = [v for v,m in mate.items() if m == 0]
+      exposed = [v for v,m in list(mate.items()) if m == 0]
       aug = self.find_augmenting_path_from( exposed[0], mate)
       if not aug:
         break
@@ -1112,7 +1112,7 @@ class graph(object):
 
   def _print_mate( self, mate):
     print("MATE", end='')
-    for k,v in mate.items():
+    for k,v in list(mate.items()):
       if v:
         print("%d-%d" % (self.vertices.index(k), self.vertices.index(v)), end='')
     print("END")

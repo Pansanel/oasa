@@ -142,12 +142,12 @@ class cairo_out(object):
 
 
   def __init__( self, **kw):
-    for k, v in self.__class__.default_options.items():
+    for k, v in list(self.__class__.default_options.items()):
       setattr( self, k, v)
     # list of paths that contribute to the bounding box (probably no edges)
     self._vertex_to_bbox = {} # vertex-to-bbox mapping
     self._bboxes = [] # for overall bbox calcualtion
-    for k,v in kw.items():
+    for k,v in list(kw.items()):
       if k in self.__class__.default_options:
         setattr( self, k, v)
       else:

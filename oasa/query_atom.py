@@ -79,7 +79,7 @@ class query_atom( chem_vertex):
 
   @symbol.setter
   def symbol(self, symbol):
-    if symbol in PT.periodic_table.keys():
+    if symbol in list(PT.periodic_table.keys()):
       if not "query" in PT.periodic_table[ symbol]:
         warn( "Setting normal atom symbol to a query_atom instance, do you mean it?")
       self.symbols = set( [symbol])
@@ -117,7 +117,7 @@ class query_atom( chem_vertex):
     if self.is_query_definition( text):
       syms = set( map( str, text[1:-1].split(",")))
       for sym in syms:
-        if sym not in PT.periodic_table.keys():
+        if sym not in list(PT.periodic_table.keys()):
           raise oasa_invalid_atom_symbol( "invalid symbol in query definition", sym)
       return syms
     else:

@@ -17,14 +17,14 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 import os
 
 try:
-  import dbm
+  import dbm.ndbm
 except ImportError:
-  import anydbm
+  import dbm
 
 from . import inchi_key
 from . import inchi as inchimod
@@ -57,9 +57,9 @@ def database_string_to_compound( line):
 
 
 def mydb_to_gdbm( infilename, outfilename):
-    import gdbm
+    import dbm.gnu
     with open(infilename, 'r') as infile:
-      base = gdbm.open(outfilename, 'n')
+      base = dbm.gnu.open(outfilename, 'n')
       for line in infile:
           rec = database_string_to_compound(line)
           base[rec['inchikey']] = rec['cid'] + " " + rec['name']
@@ -72,7 +72,7 @@ def get_compound_from_database( inchikey, database_file=None):
             break
     else:
         raise Exception("Name database not found")
-    base = anydbm.open( fname)
+    base = dbm.open( fname)
     if inchikey in base:
         cid, name = base[ inchikey].split( " ", 1)
         return {'inchikey': inchikey, 'cid': cid, 'name': name}

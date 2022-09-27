@@ -17,7 +17,7 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 import re
 import os
@@ -175,7 +175,7 @@ class inchi( plugin):
 
       # here we check out if the molecule seems ok
       fvs = [v for v in self.structure.vertices if v.free_valency]
-      if not fvs and not list(filter(None, [not v.order for v in self.structure.edges])):
+      if not fvs and not list([_f for _f in [not v.order for v in self.structure.edges] if _f]):
         repeat = False
       else:
         if len( fvs) == 1:
@@ -245,8 +245,8 @@ class inchi( plugin):
     if not layer:
       return
     chunks = re.split( "([0-9]*)", layer)
-    chunks = filter( None, chunks)
-    chunks = filter( lambda x: x!='-', chunks)
+    chunks = [_f for _f in chunks if _f]
+    chunks = [x for x in chunks if x!='-']
     last_atom = None
     bracket_openings = []
     for c in chunks:
@@ -365,7 +365,7 @@ class inchi( plugin):
         assert steps < 10
 
         for v in self.structure.vertices:
-          if v.symbol != 'C' and not v.free_valency and list(filter(None, [n.free_valency for n in v.neighbors])):
+          if v.symbol != 'C' and not v.free_valency and list([_f for _f in [n.free_valency for n in v.neighbors] if _f]):
             v.charge = charge
             charge = 0
             change = True
@@ -641,10 +641,10 @@ class inchi( plugin):
       for p in head.split( ","):
         if "-" in p:
           try:
-            a, b = map( int, p.split("-"))
+            a, b = list(map( int, p.split("-")))
           except Exception as e:
             raise oasa_inchi_error( "error in hydrogen layer - non-number character(s) present in atom range specification")
-          vertices.extend( range( a, b+1))
+          vertices.extend( list(range( a, b+1)))
         else:
           try:
             vertices.append( int( p))
@@ -896,7 +896,7 @@ if __name__ == '__main__':
     t1 = time.time()
     for jj in range( cycles):
       mol = text_to_mol( text, calc_coords=True, include_hydrogens=False)
-      print(map( str, [b for b in mol.bonds if b.order == 0]))
+      print(list(map( str, [b for b in mol.bonds if b.order == 0])))
       print("  smiles: ", smiles.mol_to_text( mol))
       print("  inchi:  ", generate_inchi( mol, fixed_hs=False, program="/home/beda/bin/stdinchi-1"))
       print("  charge: ", sum( [a.charge for a in mol.vertices]))

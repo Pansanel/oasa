@@ -17,7 +17,7 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 import re
 
@@ -389,7 +389,7 @@ class smiles( plugin):
     for e in mol.edges:
       e.disconnected = False
     # here tetrahedral stereochemistry is added
-    for v, st in self._stereo_centers.items():
+    for v, st in list(self._stereo_centers.items()):
       processed_neighbors = []
       for n in self._processed_atoms:
         if n in v.neighbors:
@@ -432,7 +432,7 @@ class smiles( plugin):
         else:
           self.ring_joins.append( e)
     try:
-      start, end = filter(lambda x: x.degree == 1, mol.vertices)
+      start, end = [x for x in mol.vertices if x.degree == 1]
     except:
       #print(filter(lambda x: x.degree == 1, mol.vertices))
       raise Exception("shit")
@@ -475,7 +475,7 @@ class smiles( plugin):
 
   def _create_atom_smiles( self, v):
     self._processed_atoms.append( v)
-    if 'aromatic' in v.properties_.keys():
+    if 'aromatic' in list(v.properties_.keys()):
       symbol = v.symbol.lower()
     else:
       symbol = v.symbol
@@ -548,7 +548,7 @@ class smiles( plugin):
         if len( ps) == 1:
           print("impossible")
           continue
-        lenghts = map( len, ps)
+        lenghts = list(map( len, ps))
         ms = min( lenghts)
         p1, p2 = ps
         the_mol = (len( p1) < len( p2)) and p2 or p1
@@ -617,7 +617,7 @@ class smiles( plugin):
 
           v = (v1 in p1.vertices) and v1 or v2
           return e, p1, v, p2
-    print(mol, mol.is_connected(), ',', map( len, mol.get_connected_components()), ',', start_from)
+    print(mol, mol.is_connected(), ',', list(map( len, mol.get_connected_components())), ',', start_from)
     raise Exception("fuck, how comes!?")
 
   @staticmethod
@@ -649,7 +649,7 @@ def is_line( mol):
 
 
 def is_pure_ring(mol):
-  return list(filter(lambda x: x.degree != 2, mol.vertices)) == []
+  return list([x for x in mol.vertices if x.degree != 2]) == []
 
 
 def match_atom_lists( l1, l2):

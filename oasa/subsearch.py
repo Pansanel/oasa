@@ -17,7 +17,7 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 import os
 
@@ -67,7 +67,7 @@ class substructure_search_manager( object):
             to_ignore = parts[3].strip()
           else:
             to_ignore = ""
-          to_ignore = map(int, filter(None, to_ignore.split(",")))
+          to_ignore = list(map(int, [_f for _f in to_ignore.split(",") if _f]))
           if not name.strip():
             name = compound_type
           sub = substructure(name,
@@ -264,7 +264,7 @@ class substructure_search_manager( object):
               print("Invalid line in src file:", line[:-1], file=sys.stderr)
             elif len(parts) == 3:
               parts.append("")
-            to_ignore = map(int, filter(None, parts[3].split(",")))
+            to_ignore = list(map(int, [_f for _f in parts[3].split(",") if _f]))
             parts[3] = to_ignore
             if not parts[1]:
               parts[1] = parts[0]

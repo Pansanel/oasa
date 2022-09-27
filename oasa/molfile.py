@@ -17,7 +17,7 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 from .plugin import plugin
 from .molecule import molecule
@@ -202,7 +202,7 @@ class molfile( plugin):
     else:
       rad_line = None
     # return m_lines
-    m_lines = filter( None, [rad_line])
+    m_lines = [_f for _f in [rad_line] if _f]
     return m_lines
 
   def _read_molfile_charge( self, value):
@@ -244,7 +244,7 @@ def read_molfile_value( file, length, strip=1, conversion=None):
 try:
   from io import StringIO
 except ImportError:
-  from cStringIO import StringIO
+  from io import StringIO
 
 reads_text = 1
 reads_files = 1

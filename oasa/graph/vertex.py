@@ -65,7 +65,7 @@ class vertex(object):
   def remove_neighbor(self, v):
     self._clean_cache()
     to_del = None
-    for k, vv in self._neighbors.items():
+    for k, vv in list(self._neighbors.items()):
       if v == vv:
         to_del = k
         break
@@ -77,7 +77,7 @@ class vertex(object):
 
   def remove_edge_and_neighbor(self, e):
     self._clean_cache()
-    if e in self._neighbors.keys():
+    if e in list(self._neighbors.keys()):
       del self._neighbors[e]
     else:
       raise Exception("Cannot remove non-existing edge", e)
@@ -88,7 +88,7 @@ class vertex(object):
     """Neighboring vertices.
 
     """
-    return [v for (e,v) in self._neighbors.items()
+    return [v for (e,v) in list(self._neighbors.items())
                   if not e.disconnected]
 
 
@@ -97,7 +97,7 @@ class vertex(object):
 
 
   def get_edge_leading_to(self, a):
-    for b, at in self._neighbors.items():
+    for b, at in list(self._neighbors.items()):
       if a == at:
         return b
     return None
@@ -120,7 +120,7 @@ class vertex(object):
 
 
   def get_neighbor_edge_pairs(self):
-    for e, v in self._neighbors.items():
+    for e, v in list(self._neighbors.items()):
       if not e.disconnected:
         yield e,v
 
@@ -130,6 +130,6 @@ class vertex(object):
     """Neighboring edges.
 
     """
-    return [e for e in self._neighbors.keys()
+    return [e for e in list(self._neighbors.keys())
                 if not e.disconnected]
 

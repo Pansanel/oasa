@@ -17,7 +17,7 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import division, print_function
+
 
 import warnings
 
@@ -63,7 +63,7 @@ class coords_generator(object):
         backbone = atms
       else:
         # we should not be here, but when yes than we have to solve it
-        maxlength = max( map( len, subs))
+        maxlength = max( list(map( len, subs)))
         backbone = [su for su in subs if len( su) == maxlength][0]
         # we have to set the coords to None (for sure)
         for sub in subs:
@@ -465,7 +465,7 @@ def show_mol( mol):
   try:
     from tkinter import Tk, Canvas, Frame
   except ImportError:
-    from Tkinter import Tk, Canvas, Frame
+    from tkinter import Tk, Canvas, Frame
 
   app = Tk()
   app.title( "oasa")
@@ -523,8 +523,8 @@ def calculate_coords( mol, bond_length=0, force=0):
 
 if __name__ == '__main__':
 
-  import smiles
-  from molecule import molecule
+  from . import smiles
+  from .molecule import molecule
 
   #sm = "CP(c1ccccc1)(c2ccccc2)c3ccccc3"
   #sm = 'C1CC2C1CCCC3C2CC(CCC4)C4C3'

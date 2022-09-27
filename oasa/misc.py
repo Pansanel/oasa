@@ -41,7 +41,7 @@ def myisstr(obj):
   if sys.version_info[0] > 2:
     return isinstance(obj, str)
   else:
-    return isinstance(obj, basestring)
+    return isinstance(obj, str)
 
 
 def intersection( a, b):
@@ -122,7 +122,7 @@ def split_number_and_unit( txt):
 
 def lazy_apply( function, arguments):
   """similar to apply but returns a callable (lambda) that performs the apply when called."""
-  return lambda: apply( function, arguments)
+  return lambda: function(*arguments)
 
 
 
@@ -188,11 +188,11 @@ def reverse( iterable):
 
 # some helper, higher order functions
 
-map_functions = lambda funcs, value: zip( apply, funcs, len(funcs)*[value])
+map_functions = lambda funcs, value: list(zip( apply, funcs, len(funcs)*[value]))
 
-something_true = lambda vals: len( filter( None, vals))
+something_true = lambda vals: len( [_f for _f in vals if _f])
 
-some_apply = lambda func, vals: something_true( map( func, vals))
+some_apply = lambda func, vals: something_true( list(map( func, vals)))
 
 
 

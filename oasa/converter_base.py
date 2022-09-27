@@ -38,7 +38,7 @@ class converter_base(object):
 
   def __init__( self):
     self.configuration = {}
-    for k, v in self.default_configuration.items():
+    for k, v in list(self.default_configuration.items()):
       self.configuration[k] = v
     self.cleanup()
 

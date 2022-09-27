@@ -17,7 +17,7 @@
 
 #--------------------------------------------------------------------------
 
-from __future__ import print_function
+
 
 import os, sys, re
 try:
@@ -123,8 +123,8 @@ def get_compounds_from_database( database_file=None, **kw):
             from . import inchi_key
             kw['inchikey'] = inchi_key.key_from_inchi( kw['inchi'])
         del kw['inchi']
-    search = ["%s=?" % k for k in kw.keys()]
-    values = kw.values()
+    search = ["%s=?" % k for k in list(kw.keys())]
+    values = list(kw.values())
     tables = "structures"
     if "synonym" in kw:
         tables = "structures, synonyms"

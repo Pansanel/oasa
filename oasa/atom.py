@@ -88,7 +88,7 @@ class atom(chem_vertex):
     bonds_alternating_aromatic = 0
     bonds_single_aromatic = 0
     odd_aromatic = False
-    for b in self._neighbors.keys():
+    for b in list(self._neighbors.keys()):
       order = b.order
       if order == 4:
         if not odd_aromatic:

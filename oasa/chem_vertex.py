@@ -123,7 +123,7 @@ class chem_vertex(graph.vertex):
 
     """
     i = 0
-    for b in self._neighbors.keys():
+    for b in list(self._neighbors.keys()):
       ord = b.order
       if ord == 4:
         ord = 1
@@ -185,7 +185,7 @@ class chem_vertex(graph.vertex):
 
 
   def has_aromatic_bonds( self):
-    for b in self._neighbors.keys():
+    for b in list(self._neighbors.keys()):
       if b.aromatic:
         return 1
     return 0
