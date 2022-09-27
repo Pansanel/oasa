@@ -19,63 +19,53 @@ import copy
 from warnings import warn
 
 
-
 class edge(object):
 
-  attrs_to_copy = ("disconnected",)
+    attrs_to_copy = ("disconnected",)
 
-  def __init__(self, vs=[]):
-    self._vertices = []
-    self.set_vertices(vs)
-    self.properties_ = {}
-    self.disconnected = False
+    def __init__(self, vs=[]):
+        self._vertices = []
+        self.set_vertices(vs)
+        self.properties_ = {}
+        self.disconnected = False
 
+    def __str__(self):
+        return "edge between %s %s" % tuple(map(str, self.vertices))
 
-  def __str__(self):
-    return "edge between %s %s" % tuple(map(str, self.vertices))
+    def copy(self):
+        other = self.__class__()
+        for attr in self.attrs_to_copy:
+            setattr(other, attr, copy.copy(getattr(self, attr)))
+        return other
 
+    def set_vertices(self, vs=[]):
+        # Ring perception algorithm relies on allowing both vertices to be the same
+        if vs and len(vs) == 2:
+            self._vertices = list(vs)
 
-  def copy(self):
-    other = self.__class__()
-    for attr in self.attrs_to_copy:
-      setattr(other, attr, copy.copy(getattr(self, attr)))
-    return other
+    def get_vertices(self):
+        return self._vertices
 
+    @property
+    def neighbor_edges(self):
+        v1, v2 = self.vertices
+        out1 = [e for e in v1.neighbor_edges if e != self]
+        out2 = [e for e in v2.neighbor_edges if e != self]
+        return out1 + out2
 
-  def set_vertices(self, vs=[]):
-    # Ring perception algorithm relies on allowing both vertices to be the same
-    if vs and len(vs) == 2:
-      self._vertices = list(vs)
+    def get_neighbor_edges2(self):
+        """Return 2 lists of neighbor edges (one for one side, one for the other).
 
+        """
+        v1, v2 = self.vertices
+        out1 = [e for e in v1.neighbor_edges if e != self]
+        out2 = [e for e in v2.neighbor_edges if e != self]
+        return out1, out2
 
-  def get_vertices(self):
-    return self._vertices
+    @property
+    def disconnected(self):
+        return self._disconnected
 
-
-  @property
-  def neighbor_edges(self):
-    v1, v2 = self.vertices
-    out1 = [e for e in v1.neighbor_edges if e != self]
-    out2 = [e for e in v2.neighbor_edges if e != self]
-    return out1 + out2
-
-
-  def get_neighbor_edges2(self):
-    """Return 2 lists of neighbor edges (one for one side, one for the other).
-
-    """
-    v1, v2 = self.vertices
-    out1 = [e for e in v1.neighbor_edges if e != self]
-    out2 = [e for e in v2.neighbor_edges if e != self]
-    return out1, out2
-
-
-  @property
-  def disconnected(self):
-    return self._disconnected
-
-
-  @disconnected.setter
-  def disconnected(self, d):
-    self._disconnected = d
-
+    @disconnected.setter
+    def disconnected(self, d):
+        self._disconnected = d

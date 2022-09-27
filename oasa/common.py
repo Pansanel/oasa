@@ -14,7 +14,6 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-
 def gen_combinations_of_series(series):
     """series is a list of lists (tuples), the generator yields
     lists by combining each element of each list with each other"""

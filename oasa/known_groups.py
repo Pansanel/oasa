@@ -14,7 +14,6 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-
 cdml_to_smiles = {'Me': 'C',
                   'Ph': 'c1ccccc1',
                   'Et': 'CC',

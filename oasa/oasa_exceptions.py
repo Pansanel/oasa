@@ -14,7 +14,6 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-
 class oasa_error(Exception):
 
     def __init__(self, *args, **kw):

@@ -19,120 +19,116 @@ Suitable for analysis of chemical problems.
 """
 
 
-
 import copy
 import operator
 import warnings
 
-from . import graph
-from .diedge import diedge
-from .vertex import vertex
-
+from bkchem import graph
+from bkchem.graph import diedge
+from bkchem.graph import vertex
 
 
 class digraph(graph.graph):
-  """Provide a minimalistic graph implementation.
+    """Provide a minimalistic graph implementation.
 
-  Suitable for analysis of chemical problems,
-  even if some care was taken to make the graph work with nonsimple graphs,
-  there are cases where it won't!
-  """
-  vertex_class = vertex
-  edge_class = diedge
+    Suitable for analysis of chemical problems,
+    even if some care was taken to make the graph work with nonsimple graphs,
+    there are cases where it won't!
+    """
+    vertex_class = vertex
+    edge_class = diedge
 
+    def __str__(self):
+        str = "digraph G(V,E), |V|=%d, |E|=%d" % (
+            len(self.vertices), len(self.edges))
+        return str
 
-  def __str__( self):
-    str = "digraph G(V,E), |V|=%d, |E|=%d" % ( len( self.vertices), len( self.edges))
-    return str
+    def add_edge(self, v1, v2, e=None):
+        """adds an edge to a graph connecting vertices v1 and v2, if e argument is not given creates a new one.
+        returns None if operation fails or the edge instance if successful"""
+        i1 = self._get_vertex_index(v1)
+        i2 = self._get_vertex_index(v2)
+        if i1 is None or i2 is None:
+            warnings.warn(
+                "Adding edge to a vertex not present in graph failed (of course)", UserWarning, 3)
+            return None
+        # to get the vertices if v1 and v2 were indexes
+        v1 = self.vertices[i1]
+        v2 = self.vertices[i2]
+        if not e:
+            e = self.create_edge()
+        e.set_vertices((v1, v2))
+        self.edges.add(e)
+        v1.add_neighbor(v2, e)
+        return e
 
+    def get_diameter(self):
+        diameter = 0
+        best = None
+        best_path = None
+        for v in self.vertices:
+            dist = self.mark_vertices_with_distance_from(v)
+            if dist > diameter:
+                diameter = dist
+                best = v
+                end = [x for x in self.vertices if 'd' in x.properties_ and x.properties_[
+                    'd'] == dist][0]
+                best_path = self.get_random_longest_path_numbered(v, end)
 
-  def add_edge( self, v1, v2, e=None):
-    """adds an edge to a graph connecting vertices v1 and v2, if e argument is not given creates a new one.
-    returns None if operation fails or the edge instance if successful"""
-    i1 = self._get_vertex_index( v1)
-    i2 = self._get_vertex_index( v2)
-    if i1 is None or i2 is None:
-      warnings.warn( "Adding edge to a vertex not present in graph failed (of course)", UserWarning, 3)
-      return None
-    # to get the vertices if v1 and v2 were indexes
-    v1 = self.vertices[ i1]
-    v2 = self.vertices[ i2]
-    if not e:
-      e = self.create_edge()
-    e.set_vertices( (v1,v2))
-    self.edges.add( e)
-    v1.add_neighbor( v2, e)
-    return e
+        print("path")
+        best_path.reverse()
+        for v in best_path:
+            print(v)
+        return diameter
 
+    def get_connected_components(self):
+        """returns the connected components of graph in a form o list of lists of vertices"""
+        comp = set()  # just processed component
+        comps = []
+        not_processed = set(self.vertices)
+        if not_processed:
+            recent = set()  # [not_processed.pop()])
+        processed = set()
 
-  def get_diameter( self):
-    diameter = 0
-    best = None
-    best_path = None
-    for v in self.vertices:
-      dist = self.mark_vertices_with_distance_from( v)
-      if dist > diameter:
-        diameter = dist
-        best = v
-        end = [x for x in self.vertices if 'd' in x.properties_ and x.properties_['d'] == dist][0]
-        best_path = self.get_random_longest_path_numbered( v, end)
-
-    print("path")
-    best_path.reverse()
-    for v in best_path:
-      print(v)
-    return diameter
-
-
-  def get_connected_components( self):
-    """returns the connected components of graph in a form o list of lists of vertices"""
-    comp = set() # just processed component
-    comps = []
-    not_processed = set( self.vertices)
-    if not_processed:
-      recent = set() # [not_processed.pop()])
-    processed = set()
-
-    while not_processed:
-      recent = set(j for i in [a.neighbors for a in recent]
+        while not_processed:
+            recent = set(j for i in [a.neighbors for a in recent]
                          for j in i) & not_processed
-      processed = recent | comp
-      for e in self.edges:
-        v1, v2 = e.get_vertices()
-        if (v1 in processed and v2 in not_processed):
-          recent.add( v2)
-        elif (v2 in processed and v1 in not_processed):
-          recent.add( v1)
-      if not recent:
-        if comp:
-          yield comp
-        recent = set( [not_processed.pop()])
-        comp = recent
-      else:
-        comp |= recent
-        not_processed -= recent
-    # when there is only one atom in the last piece it is not yielded in the loop
-    yield comp
+            processed = recent | comp
+            for e in self.edges:
+                v1, v2 = e.get_vertices()
+                if (v1 in processed and v2 in not_processed):
+                    recent.add(v2)
+                elif (v2 in processed and v1 in not_processed):
+                    recent.add(v1)
+            if not recent:
+                if comp:
+                    yield comp
+                recent = set([not_processed.pop()])
+                comp = recent
+            else:
+                comp |= recent
+                not_processed -= recent
+        # when there is only one atom in the last piece it is not yielded in the loop
+        yield comp
 
+    def get_random_longest_path_numbered(self, start, end):
+        """vertices have to be freshly marked with distance"""
+        now = end
+        path = []
+        d = end.properties_['d']
+        while now:
+            d -= 1
+            path.append(now)
+            ns = [v for v in self.vertices if 'd' in v.properties_ and v.properties_[
+                'd'] == d and now in v.neighbors]
+            if ns:
+                now = ns[0]
+            else:
+                now = None
+        return path
 
-  def get_random_longest_path_numbered( self, start, end):
-    """vertices have to be freshly marked with distance"""
-    now = end
-    path = []
-    d = end.properties_['d']
-    while now:
-      d -= 1
-      path.append( now)
-      ns = [v for v in self.vertices if 'd' in v.properties_ and v.properties_['d'] == d and now in v.neighbors]
-      if ns:
-        now = ns[0]
-      else:
-        now = None
-    return path
-
-
-  def get_graphviz_text_dump( self):
-    ret = '''digraph "dump" {
+    def get_graphviz_text_dump(self):
+        ret = '''digraph "dump" {
     fontpath="/usr/share/fonts/corefonts";
     ratio=compress
     nodesep=0.1;
@@ -140,10 +136,9 @@ class digraph(graph.graph):
     rankdir=LR;
     node [shape=box,fontsize=10,fontname=Arial,height=0.3];
     '''
-    for v in self.vertices:
-      for n in v.neighbors:
-        ret += '"%s" -> "%s";\n' % (v,n);
-      ret += '"%s" [label="%s"];\n' % (v,v.value)
-    ret += "}"
-    return ret
-
+        for v in self.vertices:
+            for n in v.neighbors:
+                ret += '"%s" -> "%s";\n' % (v, n)
+            ret += '"%s" [label="%s"];\n' % (v, v.value)
+        ret += "}"
+        return ret
