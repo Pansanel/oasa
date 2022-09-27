@@ -14,42 +14,6 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-import sys
-if not (sys.version_info[0] > 2 or (sys.version_info[0] == 2 and sys.version_info[1] >= 6)):
-    raise ImportError(
-        "Python version %d.%d is lower than 2.6 which is needed by OASA" % sys.version_info[0:2])
-
-
-from . import atom
-from . import bond
-from . import molecule
-from . import smiles
-from . import coords_generator
-from . import coords_optimizer
-from . import molfile
-from . import inchi
-from . import cdml
-from . import graph
-from . import linear_formula
-from . import periodic_table
-from . import config
-from . import query_atom
-from . import chem_vertex
-from . import oasa_exceptions
-from . import subsearch
-from . import svg_out
-from . import stereochemistry
-from . import geometry
-from . import transform3d
-from . import transform
-from . import known_groups
-
-atom = atom.atom
-bond = bond.bond
-molecule = molecule.molecule
-query_atom = query_atom.query_atom
-chem_vertex = chem_vertex.chem_vertex
-
 allNames = ['atom', 'bond', 'chem_vertex', 'coords_generator', 'config',
             'coords_optimizer', 'geometry', 'graph', 'inchi', 'known_groups',
             'linear_formula', 'molecule', 'molfile', 'name_database',
@@ -58,7 +22,7 @@ allNames = ['atom', 'bond', 'chem_vertex', 'coords_generator', 'config',
             'transform3d']
 
 try:
-    from . import cairo_out
+    from oasa import cairo_out
 except ImportError:
     CAIRO_AVAILABLE = False
 else:
@@ -67,17 +31,15 @@ else:
 
 # inchi_key
 try:
-    from . import inchi_key
+    from oasa import inchi_key
 except Exception as e:
-    #print >> sys.stderr, "Module inchi_key could not be loaded - inchi_key related features will be disabled\nSee the error message for more info:\n  %s" % e
     INCHI_KEY_AVAILABLE = False
 else:
     allNames.append("inchi_key")
     INCHI_KEY_AVAILABLE = True
 
-# name_database (requires inchi_key which requires mhash in Python 2.4)
 try:
-    from . import name_database
+    from oasa import name_database
 except Exception as e:
     NAME_DATABASE_AVAILABLE = False
 else:
@@ -86,9 +48,8 @@ else:
 
 # structure_database requires sqlite
 try:
-    from . import structure_database
+    from oasa import structure_database
 except Exception as e:
-    #print >> sys.stderr, "Module structure_database could not be loaded - structure_database related features will be disabled\nSee the error message for more info:\n  %s" % e
     STRUCTURE_DATABASE_AVAILABLE = False
 else:
     allNames.append("structure_database")
@@ -96,9 +57,8 @@ else:
 
 # pybel
 try:
-    from . import pybel_bridge
+    from oasa import pybel_bridge
 except Exception as e:
-    #print >> sys.stderr, "The 'pybel_bridge' python module could not be loaded - oasa-pybel integration will be disabled\nSee the error message for more info:\n  %s" % e
     PYBEL_AVAILABLE = False
 else:
     allNames.append("pybel_bridge")

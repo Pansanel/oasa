@@ -18,7 +18,7 @@ import re
 import hashlib
 import operator
 
-from . import misc
+from oasa import misc
 
 
 triplets = [

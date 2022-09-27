@@ -28,7 +28,8 @@ class vertex(object):
     connectivity matrix.
     Vertex has a value attribute used to store arbitrary objects.
     """
-    attrs_to_copy = ("value",)
+
+    attrs_to_copy = ("value")
 
     def __init__(self):
         # used to store intermediate properties such as distances etc.

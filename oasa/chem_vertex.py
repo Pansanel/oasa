@@ -18,9 +18,9 @@ import copy
 
 from warnings import warn
 
-from . import graph
-from . import periodic_table as PT
-from .common import is_uniquely_sorted
+import oasa.graph
+import oasa.periodic_table as PT
+from oasa.common import is_uniquely_sorted
 
 
 class chem_vertex(graph.vertex):
