@@ -1,21 +1,17 @@
-#--------------------------------------------------------------------------
-#     This file is part of OASA - a free chemical python library
-#     Copyright (C) 2003-2008 Beda Kosata <beda@zirael.org>
-
-#     This program is free software; you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation; either version 2 of the License, or
-#     (at your option) any later version.
-
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-
-#     Complete text of GNU GPL can be found in the file gpl.txt in the
-#     main directory of the program
-
-#--------------------------------------------------------------------------
+# Copyright (C) 2003-2008 Beda Kosata <beda@zirael.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
 
@@ -53,7 +49,7 @@ name_to_smiles = {'Me': 'C',
                   'Alloc': 'C(=O)OCC=C',
                   'Z':     'C(=O)OCc1ccccc1',
                   'Fmoc':  'C(=O)OCC1c2ccccc2-c3c1cccc3',
-#                  'DMAM':  '
+                  #                  'DMAM':  '
                   'CE':    'CCC#N',
                   'MOP':   'CC1=CC(OC)=CC=N1=O',
                   'Tr':    'C(c1ccccc1)(c2ccccc2)c3ccccc3',
@@ -62,5 +58,5 @@ name_to_smiles = {'Me': 'C',
                   'TMS':   'Si(C)(C)C',
                   'TBDMS': 'Si(C)(C)C(C)(C)C',
                   'TBDPS': 'Si(C(C)(C)C)(c1ccccc1)c2ccccc2',
-                  
+
                   }

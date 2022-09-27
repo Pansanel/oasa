@@ -1,25 +1,23 @@
-#--------------------------------------------------------------------------
-#     This file is part of OASA - a free chemical python library
-#     Copyright (C) 2003-2008 Beda Kosata <beda@zirael.org>
+# Copyright (C) 2003-2008 Beda Kosata <beda@zirael.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, see <http://www.gnu.org/licenses/>
 
-#     This program is free software; you can redistribute it and/or modify
-#     it under the terms of the GNU General Public License as published by
-#     the Free Software Foundation; either version 2 of the License, or
-#     (at your option) any later version.
-
-#     This program is distributed in the hope that it will be useful,
-#     but WITHOUT ANY WARRANTY; without even the implied warranty of
-#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#     GNU General Public License for more details.
-
-#     Complete text of GNU GPL can be found in the file gpl.txt in the
-#     main directory of the program
-
-#--------------------------------------------------------------------------
 
 import sys
 if not (sys.version_info[0] > 2 or (sys.version_info[0] == 2 and sys.version_info[1] >= 6)):
-  raise ImportError("Python version %d.%d is lower than 2.6 which is needed by OASA" % sys.version_info[0:2])
+    raise ImportError(
+        "Python version %d.%d is lower than 2.6 which is needed by OASA" % sys.version_info[0:2])
 
 
 from . import atom
@@ -60,52 +58,51 @@ allNames = ['atom', 'bond', 'chem_vertex', 'coords_generator', 'config',
             'transform3d']
 
 try:
-  from . import cairo_out
+    from . import cairo_out
 except ImportError:
-  CAIRO_AVAILABLE = False
+    CAIRO_AVAILABLE = False
 else:
-  allNames.append("cairo_out")
-  CAIRO_AVAILABLE = True
+    allNames.append("cairo_out")
+    CAIRO_AVAILABLE = True
 
 # inchi_key
 try:
-  from . import inchi_key
+    from . import inchi_key
 except Exception as e:
-  #print >> sys.stderr, "Module inchi_key could not be loaded - inchi_key related features will be disabled\nSee the error message for more info:\n  %s" % e
-  INCHI_KEY_AVAILABLE = False
+    #print >> sys.stderr, "Module inchi_key could not be loaded - inchi_key related features will be disabled\nSee the error message for more info:\n  %s" % e
+    INCHI_KEY_AVAILABLE = False
 else:
-  allNames.append("inchi_key")
-  INCHI_KEY_AVAILABLE = True
+    allNames.append("inchi_key")
+    INCHI_KEY_AVAILABLE = True
 
 # name_database (requires inchi_key which requires mhash in Python 2.4)
 try:
-  from . import name_database
+    from . import name_database
 except Exception as e:
-  NAME_DATABASE_AVAILABLE = False
+    NAME_DATABASE_AVAILABLE = False
 else:
-  allNames.append("name_database")
-  NAME_DATABASE_AVAILABLE = True
+    allNames.append("name_database")
+    NAME_DATABASE_AVAILABLE = True
 
 # structure_database requires sqlite
 try:
-  from . import structure_database
+    from . import structure_database
 except Exception as e:
-  #print >> sys.stderr, "Module structure_database could not be loaded - structure_database related features will be disabled\nSee the error message for more info:\n  %s" % e
-  STRUCTURE_DATABASE_AVAILABLE = False
+    #print >> sys.stderr, "Module structure_database could not be loaded - structure_database related features will be disabled\nSee the error message for more info:\n  %s" % e
+    STRUCTURE_DATABASE_AVAILABLE = False
 else:
-  allNames.append("structure_database")
-  STRUCTURE_DATABASE_AVAILABLE = True
+    allNames.append("structure_database")
+    STRUCTURE_DATABASE_AVAILABLE = True
 
 # pybel
 try:
-  from . import pybel_bridge
+    from . import pybel_bridge
 except Exception as e:
-  #print >> sys.stderr, "The 'pybel_bridge' python module could not be loaded - oasa-pybel integration will be disabled\nSee the error message for more info:\n  %s" % e
-  PYBEL_AVAILABLE = False
+    #print >> sys.stderr, "The 'pybel_bridge' python module could not be loaded - oasa-pybel integration will be disabled\nSee the error message for more info:\n  %s" % e
+    PYBEL_AVAILABLE = False
 else:
-  allNames.append("pybel_bridge")
-  PYBEL_AVAILABLE = True
+    allNames.append("pybel_bridge")
+    PYBEL_AVAILABLE = True
 
 
 __all__ = allNames
-
