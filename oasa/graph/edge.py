@@ -39,7 +39,8 @@ class edge(object):
         return other
 
     def set_vertices(self, vs=[]):
-        # Ring perception algorithm relies on allowing both vertices to be the same
+        # Ring perception algorithm relies on allowing both vertices
+        # to be the same
         if vs and len(vs) == 2:
             self._vertices = list(vs)
 

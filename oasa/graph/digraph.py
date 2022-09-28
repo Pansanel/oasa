@@ -23,20 +23,20 @@ import copy
 import operator
 import warnings
 
-from bkchem import graph
-from bkchem.graph import diedge
-from bkchem.graph import vertex
+from oasa.graph import diedge
+from oasa.graph import graph
+from oasa.graph import vertex
 
 
-class digraph(graph.graph):
+class Digraph(graph.Graph):
     """Provide a minimalistic graph implementation.
 
     Suitable for analysis of chemical problems,
     even if some care was taken to make the graph work with nonsimple graphs,
     there are cases where it won't!
     """
-    vertex_class = vertex
-    edge_class = diedge
+    vertex_class = vertex.Vertex
+    edge_class = diedge.Diedge
 
     def __str__(self):
         str = "digraph G(V,E), |V|=%d, |E|=%d" % (
@@ -44,13 +44,18 @@ class digraph(graph.graph):
         return str
 
     def add_edge(self, v1, v2, e=None):
-        """adds an edge to a graph connecting vertices v1 and v2, if e argument is not given creates a new one.
-        returns None if operation fails or the edge instance if successful"""
+        """adds an edge to a graph connecting vertices v1 and v2.
+
+        If the e argument is not given, it creates a new one.
+        returns None if operation fails or the edge instance if successful.
+       """
         i1 = self._get_vertex_index(v1)
         i2 = self._get_vertex_index(v2)
         if i1 is None or i2 is None:
             warnings.warn(
-                "Adding edge to a vertex not present in graph failed (of course)", UserWarning, 3)
+                "Adding edge to a vertex not present in graph failed ",
+                UserWarning, 3
+            )
             return None
         # to get the vertices if v1 and v2 were indexes
         v1 = self.vertices[i1]
@@ -71,8 +76,11 @@ class digraph(graph.graph):
             if dist > diameter:
                 diameter = dist
                 best = v
-                end = [x for x in self.vertices if 'd' in x.properties_ and x.properties_[
-                    'd'] == dist][0]
+                end = []
+                for vertice in self.vertices:
+                    if 'd' in vertice.properties_ and \
+                            vertices.properties_['d'] == dist[0]:
+                        end.append(vertice)
                 best_path = self.get_random_longest_path_numbered(v, end)
 
         print("path")
@@ -82,7 +90,7 @@ class digraph(graph.graph):
         return diameter
 
     def get_connected_components(self):
-        """returns the connected components of graph in a form o list of lists of vertices"""
+        """returns the connected components as a list of lists of vertices."""
         comp = set()  # just processed component
         comps = []
         not_processed = set(self.vertices)
@@ -108,7 +116,8 @@ class digraph(graph.graph):
             else:
                 comp |= recent
                 not_processed -= recent
-        # when there is only one atom in the last piece it is not yielded in the loop
+        # When there is only one atom in the last piece it is not yielded
+        # in the loop
         yield comp
 
     def get_random_longest_path_numbered(self, start, end):
@@ -119,8 +128,12 @@ class digraph(graph.graph):
         while now:
             d -= 1
             path.append(now)
-            ns = [v for v in self.vertices if 'd' in v.properties_ and v.properties_[
-                'd'] == d and now in v.neighbors]
+            ns = []
+            for vertice in self.vertices:
+                if 'd' in vertice.properties_ and \
+                        vertice.properties_['d'] == d and \
+                        now in vertice.neighbors:
+                    ns.append(vertice)
             if ns:
                 now = ns[0]
             else:

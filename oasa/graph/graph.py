@@ -24,11 +24,12 @@ import time
 import operator
 import warnings
 
+import oasa
 from oasa.graph import edge
 from oasa.graph import vertex
 
 
-class graph(object):
+class Graph(object):
     """Provide a minimalistic graph implementation.
 
     Suitable for analysis of chemical problems,
@@ -38,6 +39,7 @@ class graph(object):
     uses_cache = True
 
     def __init__(self, vertices=[]):
+        """Initializes the Graph class."""
         if vertices:
             self.vertices = vertices
         else:
@@ -52,7 +54,8 @@ class graph(object):
         return str
 
     def copy(self):
-        """provides a really shallow copy, the vertex and edge objects will remain the same,
+        """Provides a really shallow copy.
+        The vertex and edge objects will remain the same,
         only the graph itself is different"""
         c = self.create_graph()
         c.vertices = copy.copy(self.vertices)
@@ -77,10 +80,10 @@ class graph(object):
         return c
 
     def create_vertex(self):
-        return vertex()
+        return vertex.Vertex()
 
     def create_edge(self):
-        return edge()
+        return edge.Edge()
 
     def create_graph(self):
         return self.__class__()
@@ -90,8 +93,10 @@ class graph(object):
         self._flush_cache()
 
     def add_vertex(self, v=None):
-        """adds a vertex to a graph, if v argument is not given creates a new one.
-        returns None if vertex is already present or the vertex instance if successful"""
+        """Adds a vertex to a graph.
+        If v argument is not given creates a new one.
+        returns None if vertex is already present or
+        the vertex instance if successful."""
         if not v:
             v = self.create_vertex()
         if v not in self.vertices:
@@ -104,13 +109,16 @@ class graph(object):
         return v
 
     def add_edge(self, v1, v2, e=None):
-        """adds an edge to a graph connecting vertices v1 and v2, if e argument is not given creates a new one.
+        """Adds an edge to a graph connecting vertices v1 and v2.
+        If e argument is not given creates a new one.
         returns None if operation fails or the edge instance if successful"""
         i1 = self._get_vertex_index(v1)
         i2 = self._get_vertex_index(v2)
         if i1 is None or i2 is None:
             warnings.warn(
-                "Adding edge to a vertex not present in graph failed (of course)", UserWarning, 3)
+                "Adding edge to a vertex not present in graph failed",
+                UserWarning, 3
+            )
             return None
         # to get the vertices if v1 and v2 were indexes
         v1 = self.vertices[i1]
@@ -347,9 +355,7 @@ class graph(object):
             yield v.degree
 
     def get_neighbors(self, v):
-        """Info - available also trough the vertex.neighbors.
-
-        """
+        """Info - available also trough the vertex.neighbors."""
         for i in self.get_neighbors_indexes(v):
             yield self.vertices[i]
 
@@ -449,7 +455,7 @@ class graph(object):
         other cycles in graph are guaranteed to be combinations of them.
         Gasteiger J. (Editor), Engel T. (Editor), Chemoinformatics : A Textbook, John Wiley & Sons 2001,
         ISBN 3527306811, 174."""
-        #assert self.is_connected()
+        # assert self.is_connected()
         ncycles = len(self.edges) - len(self.vertices) + \
             len(list(self.get_connected_components()))
         # check if the graph is connected, don't know if we should do it...
@@ -515,8 +521,8 @@ class graph(object):
                             path.update(now)
                         if path:
                             paths.add(frozenset(path))
-                    l = max(list(map(len, paths)))
-                    path = [p for p in paths if len(p) == l][0]
+                    length = max(list(map(len, paths)))
+                    path = [p for p in paths if len(p) == length][0]
                     # now mark them for disconnection
                     v1 = set(path).pop()
                     to_disconnect.add(list(v1.neighbor_edges)[0])
@@ -715,7 +721,7 @@ class graph(object):
             dist += 1
             for e in new:
                 for ne in e.neighbor_edges:
-                    if not ne in marked:
+                    if ne not in marked:
                         ne.properties_['dist'] = dist
                         new_new.add(ne)
             new = new_new
@@ -723,7 +729,7 @@ class graph(object):
 
     def get_path_between_edges(self, e1, e2):
         self.mark_edges_with_distance_from(e1)
-        if not "dist" in e2.properties_:
+        if "dist" not in e2.properties_:
             return None
         else:
             path = [e2]
@@ -746,8 +752,8 @@ class graph(object):
             if dist > diameter:
                 diameter = dist
                 best = v
-                #end = [x for x in self.vertices if x.properties_['d'] == dist][0]
-                #best_path = get_path_down_to( end, v)
+                # end = [x for x in self.vertices if x.properties_['d'] == dist][0]
+                # best_path = get_path_down_to( end, v)
                 yield diameter
         if diameter == 0:
             yield 0
@@ -778,40 +784,6 @@ class graph(object):
         else:
             return d
 
-
-# does not work because the mark_vertices_with_distance_from is not thread safe,
-# it writes to v.properties_['d']. It would have to be switched to v.properties_['dX']
-# where X is the number of the thread
-# def get_diameter_multi_thread( self, processes=2, group_by=100):
-##     threads = []
-##     attrs = list( self.vertices)
-##     diameter = 0
-
-# while attrs or threads:
-# if len( threads) < processes and attrs:
-# if len( attrs) > group_by:
-##           _as = attrs[0:group_by]
-##           del attrs[0:group_by]
-# else:
-##           _as = attrs
-##           attrs = []
-
-##         t = MyThread( self.mark_vertices_with_distance_from, _as)
-##         threads.append( t)
-# t.start()
-# else:
-##         time.sleep( 0.05)
-
-##       dead = [t for t in threads if not t.isAlive()]
-# for d in dead:
-##         dist = max( d.ret)
-# if dist > diameter:
-##           diameter = dist
-
-##       threads = [t for t in threads if t.isAlive()]
-
-# return diameter
-
     def vertex_subgraph_to_edge_subgraph(self, cycle):
         ret = set()
         for v1 in cycle:
@@ -829,7 +801,8 @@ class graph(object):
         return ret
 
     def get_new_induced_subgraph(self, vertices, edges):
-        """returns a induced subgraph that is newly created and can be therefore freely
+        """returns a induced subgraph that is newly created
+        and can be therefore freely
         changed without worry about the original."""
         sub = self.create_graph()
         vertex_map = {}
@@ -1038,8 +1011,6 @@ class graph(object):
     def get_maximum_matching(self):
         mate, nrex = self.get_initial_matching()
         while nrex > 1:
-            #print("NREEEEEEX", nrex)
-            #self._print_mate( mate)
             exposed = [v for v, m in list(mate.items()) if m == 0]
             aug = self.find_augmenting_path_from(exposed[0], mate)
             if not aug:
@@ -1052,36 +1023,11 @@ class graph(object):
         print("MATE", end='')
         for k, v in list(mate.items()):
             if v:
-                print("%d-%d" % (self.vertices.index(k), self.vertices.index(v)), end='')
+                print("%d-%d" % (
+                    self.vertices.index(k), self.vertices.index(v)
+                ), end='')
         print("END")
 
-    # STATIC METHODS
-
-# def get_random_longest_path_numbered( self, start):
-##     """vertices have to be freshly marked with distance"""
-##     now = start
-##     path = []
-##     d = 0
-# while now:
-##       d += 1
-##       path.append( now)
-##       ns = [v for v in now.neighbors if 'd' in v.properties_ and v.properties_['d'] == d]
-# if ns:
-##         now = ns[0]
-# else:
-##         now = None
-# return path
-
-##   get_random_longest_path_numbered = classmethod( get_random_longest_path_numbered)
-
-
-# def get_random_longest_path( self, start):
-##     self.mark_vertices_with_distance_from( start)
-# return self.get_random_longest_path_numbered( start)
-
-##   get_random_longest_path = classmethod( get_random_longest_path)
-
-    # PRIVATE METHODS
     def _get_vertex_index(self, v):
         """if v is already an index, return v, otherwise return index of v on None"""
         if isinstance(v, int) and v < len(self.vertices):
@@ -1167,10 +1113,9 @@ class graph(object):
 
 
 def is_ring_end_vertex(v):
-    # NEEDS NEW COMMENT
-    #  """tells if a vertex has two neighbors with 'd' one smaller and equal or
-    #  one neighbor with equal 'd'. These are the conditions for a cycle end.
-    #  Returns the set([v]), in second case 'v' and the other with same 'd'"""
+    """tells if a vertex has two neighbors with 'd' one smaller and equal or
+    one neighbor with equal 'd'. These are the conditions for a cycle end.
+    Returns the set([v]), in second case 'v' and the other with same 'd'"""
     ed, ver = None, None
     for x in v.neighbors:
         if v.properties_['d'] == x.properties_['d']:
@@ -1184,18 +1129,20 @@ def is_ring_end_vertex(v):
 
 
 def is_ring_start_vertex(v):
-    # NEEDS NEW COMMENT
-    #  """tells if a vertex has two neighbors with 'd' one higher and equal or one neighbor with
-    #  equal 'd' (then both have neighbors with one higher 'd'). These are the conditions for a cycle start.
-    #  Returns boolean"""
+    """tells if a vertex has two neighbors with 'd' one higher and equal
+    or one neighbor with equal 'd' (then both have neighbors with one
+    higher 'd'). These are the conditions for a cycle start.
+    Returns boolean"""
     ed, ver = None, None
     for x in v.neighbors:
         if v.properties_['d'] == x.properties_['d']:
-            if len(v.get_neighbors_with_distance(v.properties_['d']+1)) and len(x.get_neighbors_with_distance(v.properties_['d']+1)):
+            if len(v.get_neighbors_with_distance(v.properties_['d']+1)) and \
+                    len(x.get_neighbors_with_distance(v.properties_['d']+1)):
                 ed = set([x, v])
         for y in v.neighbors:
             if x != y:
-                if (x.properties_['d'] == y.properties_['d']) and (x.properties_['d'] == v.properties_['d']+1):
+                if (x.properties_['d'] == y.properties_['d']) and \
+                        (x.properties_['d'] == v.properties_['d']+1):
                     ver = set([v])
                     break
     return ed, ver
@@ -1288,26 +1235,6 @@ def filter_off_dependent_cycles(cycles):
     return cs
 
 
-# def filter_off_dependent_cycles( cycles):
-##   cs = list( cycles)
-##   level = 2
-##   cs.sort( lambda a,b: -len( a) + len(b))
-##   print(len( cs), map( len, cs))
-# while level < len( cs):
-##     to_del = set()
-# for c in cs:
-##       combs = gen_variations( [x for x in cs if x != c and x & c], level)
-# for combl in combs:
-##         comb = set( combl)
-# if not comb & to_del and (c <= reduce( operator.or_, comb)):
-##           to_del.add( c)
-##           print("remove", len( c), map( len, comb))
-# break
-##     [cs.remove( x) for x in to_del]
-##     level += 1
-# return cs
-
-
 def gen_variations(items, n):
     if n == 0:
         yield []
@@ -1315,53 +1242,3 @@ def gen_variations(items, n):
         for i in range(len(items)-n+1):
             for v in gen_variations(items[i+1:], n-1):
                 yield [items[i]]+v
-
-
-from threading import Thread
-import time
-
-
-class MyThread(Thread):
-
-    def __init__(self, function, attrs):
-        """function is the function to run, attrs a list of attrs for which to run the
-        consecutively the function, additional_attrs and kw_attrs are attrs that are added to
-        each call of function"""
-        Thread.__init__(self)
-        self.function = function
-        self.attrs = attrs
-        self.ret = []
-
-    def run(self):
-        for a in self.attrs:
-            self.ret.append(self.function(a))
-
-
-## import profile
-
-## g = graph()
-# g._read_file()
-# print(g)
-## print([c for c in g.get_connected_components()])
-
-# for e in g.edges:
-# print(g.is_edge_a_bridge( e), end='')
-# print
-
-## print(len( [i for i in g.get_connected_components()]))
-# for e in g.edges:
-##   d1, d2 = [x.degree for x in e.get_vertices()]
-# if d1 != 2 or d2 != 2:
-##     v1, v2 = e.vertices
-# break
-## g.disconnect( v1, v2)
-## print(len( [i for i in g.get_connected_components()]))
-
-
-## g = g.deep_copy()
-# print(g)
-# profile.run( 'g.get_all_cycles()')
-## c = g.get_smallest_independent_cycles()
-## print('cycles %d, lengths %s' % (len( c), str( map( len, c))))
-## c = g.get_all_cycles()
-## print('cycles %d, lengths %s' % (len( c), str( map( len, c))))
