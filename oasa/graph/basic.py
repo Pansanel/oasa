@@ -14,11 +14,11 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-class attribute_flexible_class(object):
+class AttributeFlexibleClass(object):
     """Provide mechanism for addition and removing of attributes on fly."""
 
     def __init__(self):
-        """Initialize the attribute_flexible_class."""
+        """Initialize the AttributeFlexibleClass."""
         pass
 
     def add_attribute(self, name, value=None):
