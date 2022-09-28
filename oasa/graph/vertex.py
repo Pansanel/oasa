@@ -20,8 +20,8 @@
 import copy
 
 
-class vertex(object):
-    """Simple vertex class.
+class Vertex(object):
+    """Simple Vertex class.
 
     Normaly would not be needed but it can speed up many analytical tasks
     to store data directly in vertex and not get them from the graph
@@ -29,17 +29,25 @@ class vertex(object):
     Vertex has a value attribute used to store arbitrary objects.
     """
 
-    attrs_to_copy = ("value")
+    attrs_to_copy = ("value",)
 
     def __init__(self):
+        """Initializes the Vertex class."""
         # used to store intermediate properties such as distances etc.
         self.properties_ = {}
-        self.value = None  # used to store any object associated with the vertex
-        self._neighbors = {}  # set of all neighbors
+        # used to store any object associated with the vertex
+        self.value = None
+        # set of all neighbors
+        self._neighbors = {}
         self._clean_cache()
 
     def __str__(self):
-        return ("vertex, value=%s, degree=%d, " % (str(self.value), self.degree)) + str(self.properties_)
+        return (
+            "vertex, value=%s, degree=%d, " % (
+                str(self.value),
+                self.degree
+            )
+        ) + str(self.properties_)
 
     def _clean_cache(self):
         self._cache = {}
@@ -76,9 +84,7 @@ class vertex(object):
 
     @property
     def neighbors(self):
-        """Neighboring vertices.
-
-        """
+        """Return the list of neighboring vertices."""
         return [v for (e, v) in list(self._neighbors.items())
                 if not e.disconnected]
 
@@ -93,9 +99,7 @@ class vertex(object):
 
     @property
     def degree(self):
-        """Degree of the vertex.
-
-        """
+        """Return the degree of the vertex."""
         return len(self.neighbors)
 
     def get_neighbors_with_distance(self, d):
@@ -112,8 +116,6 @@ class vertex(object):
 
     @property
     def neighbor_edges(self):
-        """Neighboring edges.
-
-        """
+        """Return the list of neighboring edges."""
         return [e for e in list(self._neighbors.keys())
                 if not e.disconnected]
