@@ -14,12 +14,11 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-"""Abstract parent class for all converters.
-
-"""
+"""Abstract parent class for all converters."""
 
 
-class converter_base(object):
+class ConverterBase(object):
+    """This is a base class for all converters."""
 
     STATUS_OK = 1
     STATUS_CRITICAL_ERROR = 2
@@ -33,9 +32,12 @@ class converter_base(object):
     default_configuration = {}
 
     def __init__(self):
+        """Initializes the converter class."""
         self.configuration = {}
-        for k, v in list(self.default_configuration.items()):
-            self.configuration[k] = v
+        self.warnings = []
+        self.errors = []
+        for key, value in list(self.default_configuration.items()):
+            self.configuration[key] = value
         self.cleanup()
 
     def clean_logs(self):
@@ -46,19 +48,15 @@ class converter_base(object):
 
     def mols_to_text(self, structures):
         self.clean_logs()
-        pass
 
     def read_text(self, text):
         self.clean_logs()
-        pass
 
-    def mols_to_file(self, structures, f):
+    def mols_to_file(self, structures, filename):
         self.clean_logs()
-        pass
 
-    def read_file(self, f):
+    def read_file(self, filename):
         self.clean_logs()
-        pass
 
     def cleanup(self):
         self.clean_logs()
