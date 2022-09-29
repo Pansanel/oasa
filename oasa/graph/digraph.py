@@ -19,8 +19,6 @@ Suitable for analysis of chemical problems.
 """
 
 
-import copy
-import operator
 import warnings
 
 from oasa.graph import diedge
@@ -78,8 +76,8 @@ class Digraph(graph.Graph):
                 best = v
                 end = []
                 for vertice in self.vertices:
-                    if 'd' in vertice.properties_ and \
-                            vertices.properties_['d'] == dist[0]:
+                    if 'd' in self.vertices.properties_ and \
+                            self.vertices.properties_['d'] == dist[0]:
                         end.append(vertice)
                 best_path = self.get_random_longest_path_numbered(v, end)
 

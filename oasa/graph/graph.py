@@ -38,7 +38,7 @@ class Graph(object):
     """
     uses_cache = True
 
-    def __init__(self, vertices=[]):
+    def __init__(self, vertices=None):
         """Initializes the Graph class."""
         if vertices:
             self.vertices = vertices
@@ -140,7 +140,8 @@ class Graph(object):
 
     # do we need it?
     def connect_a_graph(self, gr, v1, v2, e=None):
-        """gr is a graph, v1 is vertex in self, v2 is vertex in gr, bond is what to use for connection"""
+        """gr is a graph, v1 is vertex in self, v2 is vertex in gr, bond
+        is what to use for connection"""
         self.insert_a_graph(gr)
         self.add_edge(v1, v2, e=e)
 

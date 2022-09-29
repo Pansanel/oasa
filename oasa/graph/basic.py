@@ -18,7 +18,7 @@ class AttributeFlexibleClass(object):
     """Provide mechanism for addition and removing of attributes on fly."""
 
     def __init__(self):
-        """Initialize the AttributeFlexibleClass."""
+        """Initializes the AttributeFlexibleClass."""
         pass
 
     def add_attribute(self, name, value=None):

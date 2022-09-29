@@ -16,15 +16,15 @@
 
 import copy
 
-from warnings import warn
 
-
-class edge(object):
+class Edge(object):
 
     attrs_to_copy = ("disconnected",)
 
-    def __init__(self, vs=[]):
-        self._vertices = []
+    def __init__(self, vs=None):
+        self.vertices = []
+        if vs is None:
+            vs = []
         self.set_vertices(vs)
         self.properties_ = {}
         self.disconnected = False
@@ -38,14 +38,16 @@ class edge(object):
             setattr(other, attr, copy.copy(getattr(self, attr)))
         return other
 
-    def set_vertices(self, vs=[]):
+    def set_vertices(self, vs=None):
         # Ring perception algorithm relies on allowing both vertices
         # to be the same
+        if vs is None:
+            vs = []
         if vs and len(vs) == 2:
-            self._vertices = list(vs)
+            self.vertices = list(vs)
 
     def get_vertices(self):
-        return self._vertices
+        return self.vertices
 
     @property
     def neighbor_edges(self):
@@ -65,8 +67,8 @@ class edge(object):
 
     @property
     def disconnected(self):
-        return self._disconnected
+        return self.disconnected
 
     @disconnected.setter
     def disconnected(self, d):
-        self._disconnected = d
+        self.disconnected = d

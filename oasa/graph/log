@@ -1,0 +1,1975 @@
+No config file found, using default configuration
+Traceback (most recent call last):
+  File "/usr/bin/pylint3", line 11, in <module>
+    load_entry_point('pylint==1.8.3', 'console_scripts', 'pylint')()
+  File "/usr/lib/python3/dist-packages/pylint/__init__.py", line 16, in run_pylint
+    Run(sys.argv[1:])
+  File "/usr/lib/python3/dist-packages/pylint/lint.py", line 1347, in __init__
+    linter.check(args)
+  File "/usr/lib/python3/dist-packages/pylint/lint.py", line 768, in check
+    self._do_check(files_or_modules)
+  File "/usr/lib/python3/dist-packages/pylint/lint.py", line 901, in _do_check
+    self.check_astroid_module(ast_node, walker, rawcheckers, tokencheckers)
+  File "/usr/lib/python3/dist-packages/pylint/lint.py", line 980, in check_astroid_module
+    walker.walk(ast_node)
+  File "/usr/lib/python3/dist-packages/pylint/utils.py", line 1014, in walk
+    self.walk(child)
+  File "/usr/lib/python3/dist-packages/pylint/utils.py", line 1014, in walk
+    self.walk(child)
+  File "/usr/lib/python3/dist-packages/pylint/utils.py", line 1014, in walk
+    self.walk(child)
+  [Previous line repeated 5 more times]
+  File "/usr/lib/python3/dist-packages/pylint/utils.py", line 1011, in walk
+    cb(astroid)
+  File "/usr/lib/python3/dist-packages/pylint/checkers/refactoring.py", line 361, in visit_call
+    self._check_raising_stopiteration_in_generator_next_call(node)
+  File "/usr/lib/python3/dist-packages/pylint/checkers/refactoring.py", line 365, in _check_raising_stopiteration_in_generator_next_call
+    inferred = utils.safe_infer(node.func)
+  File "/usr/lib/python3/dist-packages/pylint/checkers/utils.py", line 820, in safe_infer
+    value = next(inferit)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 238, in infer_attribute
+    for owner in self.expr.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 82, in wrapped
+    generator = _func(node, context, **kwargs)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 763, in infer_assign
+    stmts = list(self.assigned_stmts(context=context))
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/protocols.py", line 254, in for_assigned_stmts
+    for lst in self.iter.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 172, in infer_call
+    for inferred in callee.infer_call_result(self, callcontext):
+  File "/usr/lib/python3/dist-packages/astroid/scoped_nodes.py", line 1564, in infer_call_result
+    for inferred in returnnode.value.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 410, in _filter_operation_errors
+    for result in infer_callable(self, context):
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 722, in _infer_augassign
+    for rhs in self.value.infer(context=rhs_context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/bases.py", line 95, in _infer_stmts
+    for inferred in stmt.infer(context=context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 166, in infer_call
+    for callee in self.func.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 85, in wrapped
+    res = next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 138, in raise_if_nothing_inferred
+    yield next(generator)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 238, in infer_attribute
+    for owner in self.expr.infer(context):
+  File "/usr/lib/python3/dist-packages/astroid/context.py", line 40, in cache_generator
+    for result in generator:
+  File "/usr/lib/python3/dist-packages/astroid/decorators.py", line 82, in wrapped
+    generator = _func(node, context, **kwargs)
+  File "/usr/lib/python3/dist-packages/astroid/inference.py", line 138, in infer_name
+    frame, stmts = self.lookup(self.name)
+  File "/usr/lib/python3/dist-packages/astroid/node_classes.py", line 989, in lookup
+    return self.scope().scope_lookup(self, name)
+  File "/usr/lib/python3/dist-packages/astroid/node_classes.py", line 436, in scope
+    return self.parent.scope()
+  File "/usr/lib/python3/dist-packages/astroid/node_classes.py", line 436, in scope
+    return self.parent.scope()
+  File "/usr/lib/python3/dist-packages/astroid/node_classes.py", line 436, in scope
+    return self.parent.scope()
+  [Previous line repeated 2 more times]
+RecursionError: maximum recursion depth exceeded

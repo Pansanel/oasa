@@ -16,16 +16,20 @@
 
 class Diedge(object):
 
-    def __init__(self, vs=[]):
-        """Initialize the Diedge class."""
+    def __init__(self, vs=None):
+        """Initializes the Diedge class."""
         self.vertices = []
+        if vs is None:
+            vs = []
         self.set_vertices(vs)
         self.properties_ = {}
 
     def __str__(self):
         return "Directed edge between %s %s" % tuple(map(str, self.vertices))
 
-    def set_vertices(self, vs=[]):
+    def set_vertices(self, vs=None):
+        if vs is None:
+            vs = []
         if vs and len(vs) == 2:
             self.vertices = vs
 

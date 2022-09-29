@@ -19,20 +19,23 @@ import os
 import sys
 import string
 import select
+import subprocess
+import time
 import xml.dom.minidom as dom
 
-from . import misc
-from . import molfile
-from . import dom_extensions
-from . import coords_generator
-from . import periodic_table as pt
-from .plugin import plugin
-from .molecule import molecule
-from .stereochemistry import cis_trans_stereochemistry
-from .oasa_exceptions import oasa_not_implemented_error, oasa_inchi_error, oasa_unsupported_inchi_version_error
+from oasa import misc
+from oasa import molfile
+from oasa import dom_extensions
+from oasa import coords_generator
+from oasa import periodic_table as pt
+from oasa import plugin
+from oasa import molecule
+from oasa import smiles
+from oasa import stereochemistry
+from oasa import oasa_exceptions
 
 
-class inchi(plugin):
+class inchi(plugin.Plugin):
 
     name = "inchi"
     read = 1
@@ -43,11 +46,12 @@ class inchi(plugin):
     electron_donors = ['O', 'N', 'S', 'P']
     electron_acceptors = ['B']
 
-    stereo_remap = {"+": cis_trans_stereochemistry.OPPOSITE_SIDE,
-                    "-": cis_trans_stereochemistry.SAME_SIDE,
-                    "?": cis_trans_stereochemistry.UNDEFINED,
-                    "u": cis_trans_stereochemistry.UNDEFINED,
-                    }
+    stereo_remap = {
+        "+": stereochemistry.cis_trans_stereochemistry.OPPOSITE_SIDE,
+        "-": stereochemistry.cis_trans_stereochemistry.SAME_SIDE,
+        "?": stereochemistry.cis_trans_stereochemistry.UNDEFINED,
+        "u": stereochemistry.cis_trans_stereochemistry.UNDEFINED,
+    }
 
     def __init__(self, structure=None):
         self.structure = structure
@@ -113,22 +117,23 @@ class inchi(plugin):
         try:
             self._read_inchi(text)
         except AssertionError:
-            raise oasa_inchi_error(
-                "Localization of bonds, charges or movable hydrogens failed")
+            raise oasa_exceptions.OasaInchiError(
+                "Localization of bonds, charges or movable hydrogens failed"
+            )
         except:
             raise
 
     def _read_inchi(self, text):
         if not text:
-            raise oasa_inchi_error("No inchi was given")
-        self.structure = molecule()
+            raise oasa_exceptions.OasaInchiError("No inchi was given")
+        self.structure = molecule.Molecule()
         self.layers = self.split_layers(text)
         # version support (very crude)
         self.version = self._check_version(self.layers[0])
         if not self.version:
-            raise oasa_unsupported_inchi_version_error(self.layers[0])
+            raise oasa_exceptions.OasaUnsupportedInchiVersionError(self.layers[0])
         elif str(self.version[0]) != '1' or str(self.version[1]) != '0':
-            raise oasa_unsupported_inchi_version_error(self.layers[0])
+            raise oasa_exceptions.OasaUnsupportedInchiVersionError(self.layers[0])
 
         self.hs_in_hydrogen_layer = self.get_number_of_hydrogens_in_hydrogen_layer()
         self.read_sum_layer()
@@ -195,22 +200,16 @@ class inchi(plugin):
                     run = 0
 
         if repeat and self._no_possibility_to_improve:
-            # if len( filter( None, [v.free_valency for v in self.structure.vertices])) == 1:
-            # print
-            ##         print([(v.symbol, v.valency, v.free_valency)  for v in self.structure.vertices if v.free_valency], filter( None, [not v.order for v in self.structure.edges]), text)
-            # if sum( [v.charge for v in self.structure.vertices]) != self.charge:
-            ##         print("Charge problem", sum( [v.charge for v in self.structure.vertices]), self.charge)
-            # pass
-            raise oasa_inchi_error(
+            raise oasa_exceptions.OasaInchiError(
                 "Localization of bonds, charges or movable hydrogens failed")
-#    print("run:", run, file=sys.stderr)
 
     def read_sum_layer(self):
         if "." in self.layers[1]:
-            raise oasa_not_implemented_error(
-                "INChI", "multiple compound systems are not supported by the library")
+            raise oasa_exceptions.OasaNotImplementedError(
+                "INChI", "multiple compound systems are not supported by the library"
+            )
 
-        form = pt.formula_dict(self.layers[1])
+        form = pt.FormulaDict(self.layers[1])
         processed_hs = 0  # for diborane and similar compounds we must process some Hs here
         j = 0
         for k in form.sorted_keys():
@@ -382,7 +381,7 @@ class inchi(plugin):
                     break
 
         if charge:
-            raise oasa_exceptions.oasa_inchi_error(
+            raise oasa_exceptions.OasaInchiError(
                 "The molecular charge could not be allocated to any atom (%d)." % charge)
 
     def read_p_layer(self):
@@ -467,7 +466,7 @@ class inchi(plugin):
                 if neighs:
                     return neighs[0]
                 else:
-                    raise oasa_inchi_error(
+                    raise oasa_exceptions.OasaInchiError(
                         "No neigbors on atom with stereo information!")
 
         layer = self.get_layer("b")
@@ -480,8 +479,10 @@ class inchi(plugin):
             # we need neighbors with lowest inchi_number
             neigh1 = get_lowest_numbered_neighbor(atom1, atom2)
             neigh2 = get_lowest_numbered_neighbor(atom2, atom1)
-            st = cis_trans_stereochemistry(references=[neigh1, atom1, atom2, neigh2],
-                                           value=self.stereo_remap[sign])
+            st = stereochemistry.cis_trans_stereochemistry(
+                references=[neigh1, atom1, atom2, neigh2],
+                value=self.stereo_remap[sign]
+            )
             self.structure.add_stereochemistry(st)
 
     def _valency_to_charge(self, v, charge):
@@ -504,8 +505,9 @@ class inchi(plugin):
 
         # check if we can handle it
         if "*" in layer or ";" in layer:
-            raise oasa_not_implemented_error(
-                "INChI", "multiple compound systems are not supported by the library")
+            raise oasa_exceptions.OasaNotImplementedError(
+                "INChI", "multiple compound systems are not supported by the library"
+            )
 
         ret = 0
 
@@ -604,8 +606,9 @@ class inchi(plugin):
             try:
                 head, tail = chunk.split('H')
             except Exception as e:
-                raise oasa_inchi_error(
-                    "error in hydrogen layer - missing H symbol")
+                raise oasa_exceptions.OasaInchiError(
+                    "error in hydrogen layer - missing H symbol"
+                )
             num_h = tail and int(tail) or 1
             vertices = []
             for p in head.split(","):
@@ -613,21 +616,25 @@ class inchi(plugin):
                     try:
                         a, b = list(map(int, p.split("-")))
                     except Exception as e:
-                        raise oasa_inchi_error(
-                            "error in hydrogen layer - non-number character(s) present in atom range specification")
+                        raise oasa_exceptions.OasaInchiError(
+                            "error in hydrogen layer - non-number "
+                            "character(s) present in atom range specification"
+                        )
                     vertices.extend(list(range(a, b+1)))
                 else:
                     try:
                         vertices.append(int(p))
                     except Exception as e:
-                        raise oasa_inchi_error(
-                            "error in hydrogen layer - non-number character(s) present in atom specification")
+                        raise oasa_exceptions.OasaInchiError(
+                            "error in hydrogen layer - non-number "
+                            "character(s) present in atom specification"
+                        )
 
             yield vertices, num_h
 
     def process_forced_charges(self):
-        """this marks the charges that are forced by the connectivity and thus helps
-        process zwitrions"""
+        """Marks the charges that are forced by the connectivity and
+        thus helps process zwitrions."""
         forced_charge = 0
         for v in self.structure.vertices:
             if v.symbol in ("N", "S") and v.free_valency == -1:
@@ -636,8 +643,8 @@ class inchi(plugin):
         self.forced_charge = forced_charge
 
     def compensate_for_forced_charges(self):
-        """if there were foced charges and the molecule should not have any charge,
-        we have to take care of it here"""
+        """Takes care when there were forced charges and the molecule should
+        not have any charge,"""
         charge = self.charge - self.forced_charge
         old_charge = charge
         while not self.charge and charge:
@@ -659,12 +666,11 @@ class inchi(plugin):
                                 charge -= 1
                         if not charge:
                             return
-# if old_charge == charge:
-##         print("AAAAA", self.layers)
             assert old_charge != charge
 
     def deal_with_da_bonds(self):
-        """deal with donor-acceptor bonds, this fixes mostly boron containing compounds"""
+        """Deals with donor-acceptor bonds, this fixes mostly boron containing
+        compounds."""
         for v in self.structure.vertices:
             if v.free_valency < 0 and v.symbol in self.electron_acceptors:
                 ns = [n for n in v.neighbors if n.symbol in self.electron_donors]
@@ -683,8 +689,8 @@ class inchi(plugin):
                     yield None
 
     def _deal_with_notorious_groups(self):
-        """some groups such as NO2, SO3H etc. need the valency of the central atom to be risen,
-        this is done here"""
+        """Some groups such as NO2, SO3H etc. need the valency of the
+        central atom to be risen, this is done here"""
         for v in self.structure.vertices:
             if v.symbol == "N" and v.degree > 2:
                 for n in v.neighbors:
@@ -724,30 +730,15 @@ class inchi(plugin):
                 #        print(x, v, v.valency, v.free_valency)
                 if x and v.raise_valency():
                     break
-# if v.free_valency == 0 and v.symbol in self.proton_acceptors:
-# if v.charge == 0:
-##               v.charge = 1
-# elif v.charge == 1:
-# if v.raise_valency():
-##                 v.charge = 0
-# break
-# elif v.raise_valency():
-# break
-#          print(x, v, v.symbol, v.degree, v.valency, v.free_valency)
-#          print([e.order for e in v.neighbor_edges])
-#          break
-#        elif x == 0:
-#          break
-
-
-import subprocess
 
 
 def _run_command(command, inputs):
-    p = subprocess.Popen(command,
-                         stdin=subprocess.PIPE,
-                         stdout=subprocess.PIPE,
-                         stderr=subprocess.STDOUT)
+    p = subprocess.Popen(
+        command,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT
+    )
     o, er = p.communicate(inputs.encode('utf-8'))
     return o.decode('utf-8')
 
@@ -763,7 +754,6 @@ def generate_inchi_and_inchikey(m, program=None, fixed_hs=True, ignore_key_error
         options = "/AUXNONE /STDIO /Key" + (fixed_hs and " /FixedH" or "")
     else:
         options = "-AUXNONE -STDIO -Key" + (fixed_hs and " -FixedH" or "")
-    # print(options)
     command = [os.path.abspath(program)] + options.split()
     text = _run_command(command, mf)
     inchi = ""
@@ -782,7 +772,7 @@ def generate_inchi_and_inchikey(m, program=None, fixed_hs=True, ignore_key_error
         elif line.startswith("Error"):
             break
     if not inchi:
-        raise oasa_inchi_error("InChI program did not create any output InChI")
+        raise oasa_exceptions.OasaInchiError("InChI program did not create any output InChI")
     if not key:
         # probably old version of the InChI software
         try:
@@ -791,7 +781,7 @@ def generate_inchi_and_inchikey(m, program=None, fixed_hs=True, ignore_key_error
             if ignore_key_error:
                 key = None
             else:
-                raise oasa_inchi_error(
+                raise oasa_exceptions.OasaInchiError(
                     "InChIKey could not be generated - inchi_key module failed to load properly.")
         else:
             key = inchi_key.key_from_inchi(inchi)
@@ -808,10 +798,6 @@ def generate_inchi_key(m, program=None, fixed_hs=True):
     inchi, key, warnings = generate_inchi_and_inchikey(
         m, program=program, fixed_hs=fixed_hs)
     return key, warnings
-
-
-##################################################
-# MODULE INTERFACE
 
 
 reads_text = 1
@@ -833,9 +819,9 @@ def text_to_mol(text, include_hydrogens=True, mark_aromatic_bonds=False, calc_co
         if mark_aromatic_bonds:
             mol.mark_aromatic_bonds()
         return mol
-    except oasa_inchi_error:
+    except oasa_exceptions.OasaInchiError:
         raise
-    except oasa_not_implemented_error:
+    except oasa_exceptions.OasaNotImplementedError:
         raise
     except:
         raise
@@ -853,19 +839,7 @@ def mol_to_file(mol, f):
     f.write(mol_to_text(mol))
 
 
-#
-##################################################
-
-
-##################################################
-# DEMO
-
-
 if __name__ == '__main__':
-    import time
-
-    from . import smiles
-
     def main(text, cycles):
         t1 = time.time()
         for jj in range(cycles):
@@ -884,25 +858,8 @@ if __name__ == '__main__':
     repeat = 3
     inch = "InChI=1S/C34H16O2/c35-33-25-7-3-1-5-17(25)19-9-11-21-24-14-16-28-32-20(18-6-2-4-8-26(18)34(28)36)10-12-22(30(24)32)23-13-15-27(33)31(19)29(21)23/h1-16H"
 
-    #"InChI=1/C34H16O2/c35-33-25-7-3-1-5-17(25)19-9-11-21-24-14-16-28-32-20(18-6-2-4-8-26(18)34(28)36)10-12-22(30(24)32)23-13-15-27(33)31(19)29(21)23/h1-16H"
-    #inch = "InChI=1S/CO/c1-2"
     print("oasa::INCHI DEMO")
     print("converting following inchi into smiles (%d times)" % repeat)
     print("  inchi:   %s" % inch)
 
-    #import profile
-    #profile.run( 'main( inch, repeat)')
     main(inch, repeat)
-
-
-# DEMO END
-##################################################
-
-
-##################################################
-# TODO
-
-# rename layer to sublayer
-
-
-##################################################
