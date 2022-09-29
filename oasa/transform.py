@@ -18,24 +18,23 @@
 """
 
 
-from math import cos, sin, pi
+from math import cos, sin
 
-from . import geometry
+from oasa import geometry
 
 
-class transform(object):
-    """Provide basic higher-level interface for coordinate transforms.
-
-    """
+class Transform(object):
+    """Provide basic higher-level interface for coordinate transforms."""
 
     def __init__(self, mat=None):
+        """Initializes the Transform class."""
         if not mat:
-            self.mat = matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+            self.mat = Matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
         else:
-            self.mat = matrix(mat)
+            self.mat = Matrix(mat)
 
     def transform_xy(self, x, y):
-        x1, y1, one = self.mat.get_multiplied2([[x], [y], [1]])
+        x1, y1, *one = self.mat.get_multiplied2([[x], [y], [1]])
         return x1[0], y1[0]
 
     def transform_xyz(self, x, y, z):
@@ -44,10 +43,10 @@ class transform(object):
         x, y = self.transform_xy(x, y)
         return x, y, z
 
-    def transform_4(self, list):
+    def transform_4(self, item_list):
         "for items that have 4 coordinates (lines, rectangles) this transforms 'em all"
-        x1, y1, one = self.mat.get_multiplied2([[list[0]], [list[1]], [1]])
-        x2, y2, one = self.mat.get_multiplied2([[list[2]], [list[3]], [1]])
+        x1, y1, *one = self.mat.get_multiplied2([[item_list[0]], [item_list[1]], [1]])
+        x2, y2, *one = self.mat.get_multiplied2([[item_list[2]], [item_list[3]], [1]])
         return (x1[0], y1[0], x2[0], y2[0])
 
     def transform_list(self, l):
@@ -72,23 +71,25 @@ class transform(object):
 
     def set_move(self, dx, dy):
         "add an moving step to transformation matrix"
-        self.mat = matrix(mat=self.mat.get_multiplied(
+        self.mat = Matrix(mat=self.mat.get_multiplied(
             [[1, 0, dx], [0, 1, dy], [0, 0, 1]]))
 
     def set_rotation(self, angle):
         "add an rotation step to transformation matrix"
-        self.mat = matrix(mat=self.mat.get_multiplied(
+        self.mat = Matrix(mat=self.mat.get_multiplied(
             [[cos(angle), -sin(angle), 0], [sin(angle), cos(angle), 0], [0, 0, 1]]))
 
     def set_scaling_xy(self, mx, my):
         "add an scaling step to transformation matrix"
-        self.mat = matrix(mat=self.mat.get_multiplied(
-            [[mx, 0, 0], [0, my, 0], [0, 0, 1]]))
+        self.mat = Matrix(mat=self.mat.get_multiplied(
+            [[mx, 0, 0], [0, my, 0], [0, 0, 1]])
+        )
 
     def set_scaling(self, scale):
         "add an scaling step to transformation matrix, same scaling for both dimensions"
-        self.mat = matrix(mat=self.mat.get_multiplied(
-            [[scale, 0, 0], [0, scale, 0], [0, 0, 1]]))
+        self.mat = Matrix(mat=self.mat.get_multiplied(
+            [[scale, 0, 0], [0, scale, 0], [0, 0, 1]])
+        )
 
     def get_scaling(self):
         """computes the value of scaling from self"""
@@ -105,10 +106,8 @@ class transform(object):
         return (x12-x11)/(x02-x01), (y12-y11)/(y02-y01)
 
 
-class matrix(object):
-    """Provide common operations for matrix of 3x3 elements.
-
-    """
+class Matrix(object):
+    """Provide common operations for matrix of 3x3 elements."""
 
     def __init__(self, mat):
         self.mat = mat
