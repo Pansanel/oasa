@@ -14,27 +14,24 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-"""Provide basic coordinate transformations in 3D based on matrix algebra.
+"""Provide basic coordinate transformations in 3D based on matrix algebra."""
 
-"""
-
-from math import cos, sin, pi
+from math import cos, sin
 
 
-class transform3d(object):
-    """Provide basic higher-level interface for coordinate transforms.
-
-    """
+class Transform3D(object):
+    """Provide basic higher-level interface for coordinate transforms."""
 
     def __init__(self, mat=None):
+        """Initializes the Transform3D class."""
         if not mat:
-            self.mat = matrix([[1, 0, 0, 0], [0, 1, 0, 0],
+            self.mat = Matrix([[1, 0, 0, 0], [0, 1, 0, 0],
                                [0, 0, 1, 0], [0, 0, 0, 1]])
         else:
-            self.mat = matrix(mat)
+            self.mat = Matrix(mat)
 
     def transform_xyz(self, x, y, z):
-        x1, y1, z1, one = self.mat.get_multiplied2([[x], [y], [z], [1]])
+        x1, y1, z1, *one = self.mat.get_multiplied2([[x], [y], [z], [1]])
         return x1[0], y1[0], z1[0]
 
     def transform_xy(self, x, y):
@@ -73,7 +70,7 @@ class transform3d(object):
 
     def set_move(self, dx, dy, dz):
         "add an moving step to transformation matrix"
-        self.mat = matrix(mat=self.mat.get_multiplied(
+        self.mat = Matrix(mat=self.mat.get_multiplied(
             [[1, 0, 0, dx], [0, 1, 0, dy], [0, 0, 1, dz], [0, 0, 0, 1]]))
 
     def set_rotation(self, xa, ya, za):
@@ -87,25 +84,25 @@ class transform3d(object):
                [0, cos(xa), sin(xa), 0],
                [0, -sin(xa), cos(xa), 0],
                [0, 0, 0, 1]]
-        self.mat = matrix(mat=self.mat.get_multiplied(mat))
+        self.mat = Matrix(mat=self.mat.get_multiplied(mat))
 
     def set_rotation_y(self, ya):
         mat = [[cos(ya), 0, -sin(ya), 0],
                [0, 1, 0, 0],
                [sin(ya), 0, cos(ya), 0],
                [0, 0, 0, 1]]
-        self.mat = matrix(mat=self.mat.get_multiplied(mat))
+        self.mat = Matrix(mat=self.mat.get_multiplied(mat))
 
     def set_rotation_z(self, za):
         mat = [[cos(za), sin(za), 0, 0],
                [-sin(za), cos(za), 0, 0],
                [0, 0, 1, 0],
                [0, 0, 0, 1]]
-        self.mat = matrix(mat=self.mat.get_multiplied(mat))
+        self.mat = Matrix(mat=self.mat.get_multiplied(mat))
 
     def set_scaling_xyz(self, mx, my, mz):
         "add an scaling step to transformation matrix"
-        self.mat = matrix(mat=self.mat.get_multiplied(
+        self.mat = Matrix(mat=self.mat.get_multiplied(
             [[mx, 0, 0, 0], [0, my, 0, 0], [0, 0, mz, 0], [0, 0, 0, 1]]))
 
     def set_scaling(self, scale):
@@ -113,15 +110,14 @@ class transform3d(object):
         self.set_scaling_xyz(scale, scale, scale)
 
     def get_inverse(self):
-        return transform3d(mat=self.mat.get_inverse())
+        return Transform3D(mat=self.mat.get_inverse())
 
 
-class matrix(object):
-    """Provide common operations for matrix of 3x3 elements.
-
-    """
+class Matrix(object):
+    """Provide common operations for matrix of 3x3 elements."""
 
     def __init__(self, mat):
+        """Initializes the Matrix class."""
         self.mat = mat
 
     def get_transposed(self):
@@ -153,12 +149,12 @@ class matrix(object):
             return _ret
 
         m = self.mat
-        inv = matrix([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
+        inv = Matrix([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
         det = self.get_determinant()
         for i in range(len(m)):
             for j in range(len(m)):
                 part = _part(i, j)
-                part_det = matrix._determinant_3(part)
+                part_det = Matrix._determinant_3(part)
                 sign = (i+j) % 2 and -1.0 or 1.0
                 inv.mat[i][j] = sign * part_det / det
         return inv.get_transposed()
@@ -196,16 +192,28 @@ class matrix(object):
         return m
 
     def get_determinant(self):
-        _d3 = matrix._determinant_3
+        _d3 = Matrix._determinant_3
         m = self.mat
-        a = m[0][0] * _d3([[m[1][1], m[1][2], m[1][3]], [m[2]
-                                                         [1], m[2][2], m[2][3]], [m[3][1], m[3][2], m[3][3]]])
-        b = m[0][1] * _d3([[m[1][0], m[1][2], m[1][3]], [m[2]
-                                                         [0], m[2][2], m[2][3]], [m[3][0], m[3][2], m[3][3]]])
-        c = m[0][2] * _d3([[m[1][0], m[1][1], m[1][3]], [m[2]
-                                                         [0], m[2][1], m[2][3]], [m[3][0], m[3][1], m[3][3]]])
-        d = m[0][3] * _d3([[m[1][0], m[1][1], m[1][2]], [m[2]
-                                                         [0], m[2][1], m[2][2]], [m[3][0], m[3][1], m[3][2]]])
+        a = m[0][0] * _d3([
+            [m[1][1], m[1][2], m[1][3]],
+            [m[2][1], m[2][2], m[2][3]],
+            [m[3][1], m[3][2], m[3][3]]
+        ])
+        b = m[0][1] * _d3([
+            [m[1][0], m[1][2], m[1][3]],
+            [m[2][0], m[2][2], m[2][3]],
+            [m[3][0], m[3][2], m[3][3]]
+        ])
+        c = m[0][2] * _d3([
+            [m[1][0], m[1][1], m[1][3]],
+            [m[2][0], m[2][1], m[2][3]],
+            [m[3][0], m[3][1], m[3][3]]
+        ])
+        d = m[0][3] * _d3([
+            [m[1][0], m[1][1], m[1][2]],
+            [m[2][0], m[2][1], m[2][2]],
+            [m[3][0], m[3][1], m[3][2]]
+        ])
         return a-b+c-d
 
     @staticmethod
