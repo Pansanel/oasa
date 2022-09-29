@@ -15,17 +15,22 @@
 
 
 import re
+import sys
+import time
 
-from . import reaction
-from . import oasa_exceptions
-from . import stereochemistry
-from . import periodic_table as PT
-from .config import Config
-from .plugin import plugin
-from .molecule import molecule, equals
+from oasa import config
+from oasa import converter_base
+from oasa import coords_generator
+from oasa import molecule
+from oasa import oasa_exceptions
+from oasa import periodic_table as PT
+from oasa import plugin
+from oasa import reaction
+from oasa import stereochemistry
 
 
-class smiles(plugin):
+class Smiles(plugin.Plugin):
+    """The Smiles class."""
 
     name = "smiles"
     read = 1
@@ -38,6 +43,7 @@ class smiles(plugin):
     organic_subset = ['B', 'C', 'N', 'O', 'P', 'S', 'F', 'Cl', 'Br', 'I']
 
     def __init__(self, structure=None):
+        super().__init__()
         self.structure = structure
 
     def recode_oasa_to_smiles_bond(self, b):
@@ -83,17 +89,18 @@ class smiles(plugin):
     def get_structure(self):
         return self.structure
 
-    def read_smiles(self, text, explicit_hydrogens_to_real_atoms=False):
+    def read_smiles(self, smiles_str, explicit_hydrogens_to_real_atoms=False):
         self.explicit_hydrogens_to_real_atoms = explicit_hydrogens_to_real_atoms
-        mol = Config.create_molecule()
-        text = "".join(text.split())
+        mol = config.Config.create_molecule()
+        smiles_str = "".join(smiles_str.split())
         is_text = re.compile("^[A-Z][a-z]?$")
         # internally revert \/ bonds before numbers, this makes further processing much easier
-        text = re.sub(r"([\\/])([0-9])", lambda m: (m.group(1)
-                                                    == "/" and "\\" or "/")+m.group(2), text)
-        # // end
+        text = re.sub(r"([\\/])([0-9])", lambda m: (
+            m.group(1) == "/" and "\\" or "/")+m.group(2), smiles_str
+        )
         chunks = re.split(
-            "(\[.*?\]|[A-Z][a-z]?|%[0-9]{1,2}|[^A-Z]|[a-z])", text)
+            "(\[.*?\]|[A-Z][a-z]?|%[0-9]{1,2}|[^A-Z]|[a-z])", smiles_str
+        )
         chunks = self._check_the_chunks(chunks)
         last_atom = None
         last_bond = None
@@ -162,8 +169,6 @@ class smiles(plugin):
             elif c == ')':
                 last_atom = bracket_openings.pop(-1)
 
-        # FINISH
-        # deal with explicit valency, etc.
         for a in mol.vertices:
             if not "explicit_valency" in a.properties_:
                 a.raise_valency_to_senseful_value()
@@ -356,9 +361,9 @@ class smiles(plugin):
 
     def get_smiles(self, mol):
         if not mol.is_connected():
-            raise oasa_exceptions.oasa_not_implemented_error(
-                "SMILES", "Cannot encode disconnected compounds, such as salts etc. HINT - use molecule.get_disconnected_subgraphs() to divide the molecule to individual parts.")
-        #mol = molec.copy()
+            raise oasa_exceptions.OasaNotImplementedError(
+                "SMILES", "Cannot encode disconnected compounds, such as salts etc. HINT - use molecule.get_disconnected_subgraphs() to divide the molecule to individual parts."
+            )
         self.molecule = mol
         self.ring_joins = []
         self._processed_atoms = []
@@ -674,13 +679,9 @@ def match_atom_lists(l1, l2):
     return count
 
 
-##################################################
-# MODULE INTERFACE - newstyle
-
-from .converter_base import converter_base
 
 
-class smiles_converter(converter_base):
+class SmilesConverter(converter_base.ConverterBase):
 
     # standard converter attrs
     reads_text = True
@@ -688,22 +689,22 @@ class smiles_converter(converter_base):
     reads_files = True
     writes_files = True
 
-    default_configuration = {"R_GENERATE_COORDS": True,
-                             "R_BOND_LENGTH": 1,
-                             "R_LOCALIZE_AROMATIC_BONDS": True,
-                             "R_EXPLICIT_HYDROGENS_TO_REAL_ATOMS": False,
-
-                             "W_AROMATIC_BOND_AUTODETECT": True,
-                             "W_INDIVIDUAL_MOLECULE_SEPARATOR": ".",
-                             "W_DETECT_STEREO_FROM_COORDS": True,
-                             }
+    default_configuration = {
+        "R_GENERATE_COORDS": True,
+        "R_BOND_LENGTH": 1,
+        "R_LOCALIZE_AROMATIC_BONDS": True,
+        "R_EXPLICIT_HYDROGENS_TO_REAL_ATOMS": False,
+        "W_AROMATIC_BOND_AUTODETECT": True,
+        "W_INDIVIDUAL_MOLECULE_SEPARATOR": ".",
+        "W_DETECT_STEREO_FROM_COORDS": True,
+    }
 
     def __init__(self):
-        converter_base.__init__(self)
+        super().__init__(self)
 
     def mols_to_text(self, structures):
-        converter_base.mols_to_text(self, structures)
-        sm = smiles()
+        super().mols_to_text(structures)
+        sm = Smiles()
         ret = []
         for mol in structures:
             if self.configuration["W_AROMATIC_BOND_AUTODETECT"]:
@@ -718,8 +719,9 @@ class smiles_converter(converter_base):
         # reaction support
         if ">" in text:
             if text.count(">") != 2:
-                raise oasa_exceptions.oasa_smiles_error(
-                    "Only two '>' characters are supported in SMILES reactions. %d present" % text.count(">"))
+                raise oasa_exceptions.OasaSmilesError(
+                    "Only two '>' characters are supported in SMILES reactions. %d present" % text.count(">")
+                )
             parts = text.split(">")
             res = []
             for part in parts:
@@ -731,21 +733,21 @@ class smiles_converter(converter_base):
                 self.result = []
                 return []
             else:
-                react = reaction.reaction()
+                react = reaction.Reaction()
                 for p in res[0]:
-                    react.reactants.append(reaction.reaction_component(p))
+                    react.reactants.append(reaction.ReactionComponent(p))
                 for p in res[2]:
-                    react.products.append(reaction.reaction_component(p))
+                    react.products.append(reaction.ReactionComponent(p))
                 for p in res[1]:
-                    react.reagents.append(reaction.reaction_component(p))
+                    react.reagents.append(reaction.ReactionComponent(p))
                 self.result = [react]
                 return self.result
         else:
             return self._read_string(text)
 
     def _read_string(self, text):
-        converter_base.read_text(self, text)
-        sm = smiles()
+        super().read_text(text)
+        sm = Smiles()
         sm.read_smiles(
             text, explicit_hydrogens_to_real_atoms=self.configuration['R_EXPLICIT_HYDROGENS_TO_REAL_ATOMS'])
         mol = sm.structure
@@ -767,28 +769,19 @@ class smiles_converter(converter_base):
         self.last_status = self.STATUS_OK
         return mols
 
-    def mols_to_file(self, structures, f):
-        converter_base.mols_to_file(self, structures, f)
-        f.write(self.mols_to_text(structures))
+    def mols_to_file(self, structures, output_file):
+        super().mols_to_file(structures, output_file)
+        output_file.write(self.mols_to_text(structures))
 
-    def read_file(self, f):
-        converter_base.read_file(self, f)
+
+    def read_file(self, input_file):
+        super().read_file(input_file)
         mols = []
-        for line in f:
-            mol = self.text_to_mols(line)
+        for line in input_file:
+            mol = self.text_to_mol(line)
             mols.extend(mol)
         return mols
 
-
-converter = smiles_converter
-
-# END OF MODULE INTERFACE
-##################################################
-
-##################################################
-# MODULE INTERFACE - oldstyle
-
-from . import coords_generator
 
 reads_text = True
 writes_text = True
@@ -797,13 +790,13 @@ writes_files = True
 
 
 def mol_to_text(structure):
-    sm = smiles()
+    sm = Smiles()
     structure.mark_aromatic_bonds()
     return sm.get_smiles(structure)
 
 
 def text_to_mol(text, calc_coords=1, localize_aromatic_bonds=True):
-    sm = smiles()
+    sm = Smiles()
     sm.read_smiles(text)
     mol = sm.structure
     if localize_aromatic_bonds:
@@ -823,21 +816,11 @@ def file_to_mol(f):
     return text_to_mol(f.read())
 
 
-# END OF MODULE INTERFACE
-##################################################
-
-
-##################################################
-# DEMO
-
-
 if __name__ == '__main__':
-    import sys
-    import time
 
     def main(text, cycles):
         t = time.time()
-        conv = converter()
+        conv = SmilesConverter()
         conv.configuration['R_EXPLICIT_HYDROGENS_TO_REAL_ATOMS'] = True
         for j in range(cycles):
             mols = conv.read_text(text)
@@ -865,22 +848,3 @@ if __name__ == '__main__':
     print("  starting with:      %s" % text)
     print("  --------------------")
     main(text, repeat)
-
-# DEMO END
-##################################################
-
-
-##################################################
-# TODO
-
-# last branch does not need to be branch
-# optimize for either speed or human-readability
-# at first get rid of the edges common to two or more rings, not critical
-# handling of the start_from in disconnect_something as in disconnect_something_simple
-# could in disconnect_something happen that a start_from will be returned in a branch?
-# if I do "print(m.get_smiles( m.structure))" the ring counting does not work after that
-# the transformation can be destructive!!!  - check
-
-# THIS IS A PROBLEM : C=1ccC=2C=1C=CC=CC=2  (should be azulene)
-
-# E/Z stereo is ignored in rings
