@@ -14,15 +14,14 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-from .molecule import molecule
+from oasa import molecule
 
 
-class reaction(object):
-    """Reaction representation.
-
-    """
+class Reaction(object):
+    """Reaction representation."""
 
     def __init__(self, reactants=None, products=None, reagents=None):
+        """Initializes the Reaciton class."""
         self.reactants = reactants or []
         self.products = products or []
         self.reagents = reagents or []
@@ -41,32 +40,31 @@ class reaction(object):
         return s
 
 
-class reaction_component(object):
-    """Represents one component of a reaction.
-
-    """
+class ReactionComponent(object):
+    """Represents one component of a reaction."""
 
     def __init__(self, mol=None, stoichiometry=1):
+        """Initializes the ReacionComponent class."""
         self.stoichiometry = stoichiometry
         self.molecule = mol
 
     @property
     def molecule(self):
-        return self._molecule
+        return self.molecule
 
     @molecule.setter
     def molecule(self, mol):
-        assert isinstance(mol, molecule)
-        self._molecule = mol
+        assert isinstance(mol, molecule.Molecule)
+        self.molecule = mol
 
     @property
     def stoichiometry(self):
-        return self._stoichiometry
+        return self.stoichiometry
 
     @stoichiometry.setter
     def stoichiometry(self, stoich):
         assert isinstance(stoich, (int, float))
-        self._stoichiometry = stoich
+        self.stoichiometry = stoich
 
     def __str__(self):
         return "%s * (%s)" % (self.stoichiometry, self.molecule)
