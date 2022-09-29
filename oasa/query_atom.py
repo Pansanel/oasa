@@ -15,30 +15,29 @@
 
 
 import re
-import copy
 
 from warnings import warn
 
-from . import graph
-from . import periodic_table as PT
-from .atom import atom
-from .chem_vertex import chem_vertex
-from .common import is_uniquely_sorted
-from .oasa_exceptions import oasa_invalid_atom_symbol
+from oasa import atom
+from oasa import chem_vertex
+from oasa import oasa_exceptions
+from oasa import periodic_table as PT
 
 
-class query_atom(chem_vertex):
+class QueryAtom(chem_vertex.ChemVertex):
 
-    # ("value","charge","x","y","z","multiplicity","valency","charge","free_sites")
-    attrs_to_copy = chem_vertex.attrs_to_copy + ("symbols",)
+    attrs_to_copy = super().attrs_to_copy + ("symbols",)
 
     def __init__(self, coords=None):
-        chem_vertex.__init__(self, coords=coords)
+        """Initiliazes the QueryAtom class."""
+        super().__init__(self, coords=coords)
         self.symbols = set()
         self.free_sites = 0
+        self._symbol = None
+        self._free_sites = None
 
     def matches(self, other):
-        if not isinstance(other, atom):
+        if not isinstance(other, atom.Atom):
             return False
         # if isinstance( other, query_atom):
         #  raise ValueError, "query atoms on the recieving side are not supported"
@@ -65,9 +64,7 @@ class query_atom(chem_vertex):
 
     @property
     def symbol(self):
-        """Atom symbol.
-
-        """
+        """Atom symbol."""
         return self._symbol
 
     @symbol.setter
@@ -75,18 +72,17 @@ class query_atom(chem_vertex):
         if symbol in list(PT.periodic_table.keys()):
             if not "query" in PT.periodic_table[symbol]:
                 warn(
-                    "Setting normal atom symbol to a query_atom instance, do you mean it?")
+                    "Setting normal atom symbol to a query_atom instance, do you mean it?"
+                )
             self.symbols = set([symbol])
         else:
-            self.symbols = self.parse_query_definition(symbol)
+            self.symbols = parse_query_definition(symbol)
 
         self._symbol = symbol
 
     @property
     def free_sites(self):
-        """Atom's free sites.
-
-        """
+        """Atom's free sites."""
         return self._free_sites
 
     @free_sites.setter
@@ -96,19 +92,20 @@ class query_atom(chem_vertex):
     def __str__(self):
         return "query atom '%s'" % str(self.symbol)
 
-    @classmethod
-    def is_query_definition(self, text):
-        matcher = re.compile("\[([A-Z][a-z]?,)*[A-Z][a-z]?\]")
-        return matcher.match(text) and True or False
+def is_query_definition(text):
+    matcher = re.compile("\[([A-Z][a-z]?,)*[A-Z][a-z]?\]")
+    return matcher.match(text) and True or False
 
-    @classmethod
-    def parse_query_definition(self, text):
-        if self.is_query_definition(text):
-            syms = set(map(str, text[1:-1].split(",")))
-            for sym in syms:
-                if sym not in list(PT.periodic_table.keys()):
-                    raise oasa_invalid_atom_symbol(
-                        "invalid symbol in query definition", sym)
-            return syms
-        else:
-            raise oasa_invalid_atom_symbol("not valid query definition", text)
+def parse_query_definition(text):
+    if is_query_definition(text):
+        syms = set(map(str, text[1:-1].split(",")))
+        for sym in syms:
+            if sym not in list(PT.periodic_table.keys()):
+                raise oasa_exceptions.OasaInvalidAtomSymbol(
+                    "invalid symbol in query definition", sym
+                )
+        return syms
+    else:
+        raise oasa_exceptions.OasaInvalidAtomSymbol(
+            "not valid query definition", text
+        )
