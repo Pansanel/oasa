@@ -15,16 +15,16 @@
 
 
 import copy
-import math
 import xml.dom.minidom as dom
 
-from . import misc
-from . import geometry
-from . import transform
-from . import dom_extensions
+from oasa import geometry
+from oasa import misc
+from oasa import molfile
+from oasa import transform
+from oasa import dom_extensions
 
 
-class svg_out(object):
+class SvgOut(object):
 
     show_hydrogens_on_hetero = False
     margin = 15
@@ -34,23 +34,35 @@ class svg_out(object):
     group_items = True
 
     def __init__(self):
-        pass
+        """Initialize the SvgOut class."""
+        self.document = None
+        self.top = None
+        self.molecule = None
+        self.transformer = None
 
-    def mol_to_svg(self, mol, before=None, after=None):
+    def mol_to_svg(self, mol_data, before=None, after=None):
         """before and after should be methods or functions that will take one
         argument - svg_out instance and do whatever it wants with it - usually
         adding something to the resulting DOM tree"""
         self.document = dom.Document()
-        top = dom_extensions.elementUnder(self.document,
-                                          "svg",
-                                          attributes=(("xmlns", "http://www.w3.org/2000/svg"),
-                                                      ("version", "1.0")))
-        self.top = dom_extensions.elementUnder(top, "g",
-                                               attributes=(("stroke", "#000"),
-                                                           ("stroke-width", "1.0")))
+        top = dom_extensions.elementUnder(
+            self.document,
+            "svg",
+            attributes=(
+                ("xmlns", "http://www.w3.org/2000/svg"),
+                ("version", "1.0")
+            )
+        )
+        self.top = dom_extensions.elementUnder(
+            top, "g",
+            attributes=(
+                ("stroke", "#000"),
+                ("stroke-width", "1.0")
+            )
+        )
 
         x1, y1, x2, y2 = None, None, None, None
-        for v in mol.vertices:
+        for v in mol_data.vertices:
             if x1 is None or x1 > v.x:
                 x1 = v.x
             if x2 is None or x2 < v.x:
@@ -65,10 +77,10 @@ class svg_out(object):
         top.setAttribute("width", str(w))
         top.setAttribute("height", str(h))
 
-        self.transformer = transform.transform()
+        self.transformer = transform.Transform()
         self.transformer.set_move(-x1+self.margin, -y1+self.margin)
 
-        self.molecule = mol
+        self.molecule = mol_data
 
         if before:
             before(self)
@@ -87,9 +99,9 @@ class svg_out(object):
         return x
 
     def prepare_dumb_transformer(self):
-        tr = transform.transform()
-        tr.set_scaling(self.paper_to_canvas_coord(1))
-        return tr
+        transformer = transform.Transform()
+        transformer.set_scaling(self.paper_to_canvas_coord(1))
+        return transformer
 
     def _create_parent(self, item, top):
         if self.group_items:
@@ -184,62 +196,68 @@ class svg_out(object):
     def _draw_line(self, parent, start, end, line_width=1, capstyle=""):
         x1, y1 = start
         x2, y2 = end
-        line = dom_extensions.elementUnder(parent, 'line',
-                                           (('x1', str(x1)),
-                                            ('y1', str(y1)),
-                                            ('x2', str(x2)),
-                                            ('y2', str(y2))))
+        line = dom_extensions.elementUnder(
+            parent,
+            'line', (
+                ('x1', str(x1)),
+                ('y1', str(y1)),
+                ('x2', str(x2)),
+                ('y2', str(y2))
+            )
+        )
 
     def _draw_text(self, parent, xy, text, font_name="Arial", font_size=16):
         x, y = xy
-        dom_extensions.textOnlyElementUnder(parent, "text", text,
-                                            (("x", str(x)),
-                                             ("y", str(y)),
-                                             ("font-family", font_name),
-                                             ("font-size", str(font_size)),
-                                             ('fill', "#000")))
+        dom_extensions.textOnlyElementUnder(
+            parent, "text", text, (
+                ("x", str(x)),
+                ("y", str(y)),
+                ("font-family", font_name),
+                ("font-size", str(font_size)),
+                ('fill', "#000")
+            )
+        )
 
     def _draw_rectangle(self, parent, coords, fill_color="#fff", stroke_color="#fff"):
         x, y, x2, y2 = coords
-        dom_extensions.elementUnder(parent, 'rect',
-                                    (('x', str(x)),
-                                     ('y', str(y)),
-                                     ('width', str(x2-x)),
-                                     ('height', str(y2-y)),
-                                     ('fill', fill_color),
-                                     ('stroke', stroke_color)))
+        dom_extensions.elementUnder(
+            parent, 'rect', (
+                ('x', str(x)),
+                ('y', str(y)),
+                ('width', str(x2-x)),
+                ('height', str(y2-y)),
+                ('fill', fill_color),
+                ('stroke', stroke_color)
+            )
+        )
 
-    def _draw_circle(self, parent, xy, radius=5, fill_color="#fff", stroke_color="#fff", id="", opacity=0):
+    def _draw_circle(self, parent, xy, radius=5, fill_color="#fff", stroke_color="#fff", id_attr="", opacity=0):
         x, y = xy
-        el = dom_extensions.elementUnder(parent, 'ellipse',
-                                         (('cx', str(x)),
-                                          ('cy', str(y)),
-                                          ('rx', str(radius)),
-                                          ('ry', str(radius)),
-                                          ('stroke-width', "1"),
-                                          ('fill', fill_color),
-                                          ('stroke', stroke_color),
-                                          ('fill-opacity', str(opacity)),
-                                          ('stroke-opacity', str(opacity)),
-                                          ))
-        if id:
-            el.setAttribute("id", id)
+        el = dom_extensions.elementUnder(
+            parent, 'ellipse', (
+                ('cx', str(x)),
+                ('cy', str(y)),
+                ('rx', str(radius)),
+                ('ry', str(radius)),
+                ('stroke-width', "1"),
+                ('fill', fill_color),
+                ('stroke', stroke_color),
+                ('fill-opacity', str(opacity)),
+                ('stroke-opacity', str(opacity))
+            )
+        )
+        if id_attr:
+            el.setAttribute("id", id_attr)
 
 
-def mol_to_svg(mol, filename):
-    c = svg_out()
-    tree = c.mol_to_svg(mol)
+def mol_to_svg(mol_data, filename):
+    c = SvgOut()
+    tree = c.mol_to_svg(mol_data)
     with open(filename, 'wb') as f:
         f.write(tree.toxml('utf-8'))
 
 
 if __name__ == "__main__":
-
-    #from . import inchi
-    #mol = inchi.text_to_mol( "1/C7H6O2/c8-7(9)6-4-2-1-3-5-6/h1-5H,(H,8,9)", include_hydrogens=False, calc_coords=30)
-    #from . import smiles
-    #mol = smiles.text_to_mol( "CC[CH]", calc_coords=40)
-    from . import molfile
     mol = molfile.file_to_mol(
-        open("/home/beda/bkchem/bkchem/untitled0.mol", "r"))
+        open("../data/glycine.mol", "r"))
     mol_to_svg(mol, "output.svg")

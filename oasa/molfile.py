@@ -14,17 +14,23 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-from .plugin import plugin
-from .molecule import molecule
+from io import StringIO
+import re
+import sys
+import time
 
+from oasa import converter_base
+from oasa import plugin
+from oasa import molecule
 
-class molfile(plugin):
+class Molfile(plugin.Plugin):
 
     name = "molfile"
     read = 1
     write = 1
 
     def __init__(self, structure=None):
+        "Initializes the Molfile class."""
         self.structure = structure
 
     def set_structure(self, structure):
@@ -33,44 +39,44 @@ class molfile(plugin):
     def get_structure(self):
         return self.structure
 
-    def read_file(self, file):
-        self._read_header(file)
-        self._read_body(file)
+    def read_file(self, input_file):
+        self._read_header(input_file)
+        self._read_body(input_file)
 
-    def _read_header(self, file):
+    def _read_header(self, input_file):
         for i in range(3):
-            file.readline()
+            input_file.readline()
 
-    def _read_body(self, file):
-        atoms = read_molfile_value(file, 3, conversion=int)
-        bonds = read_molfile_value(file, 3, conversion=int)
+    def _read_body(self, input_file):
+        atoms = read_molfile_value(input_file, 3, conversion=int)
+        bonds = read_molfile_value(input_file, 3, conversion=int)
         # nothing more interesting
-        file.readline()
+        input_file.readline()
         # read the structure
-        self.structure = molecule()
+        self.structure = molecule.Molecule()
         for i in range(atoms):
-            a = self._read_atom(file)
+            a = self._read_atom(input_file)
             self.structure.add_vertex(v=a)
         for k in range(bonds):
-            b, i, j = self._read_bond(file)
+            b, i, j = self._read_bond(input_file)
             self.structure.add_edge(i, j, e=b)
-        for line in file:
+        for line in input_file:
             if line.strip() == "M  END":
                 break
             if line.strip().startswith("M  "):
                 self._read_property(line.strip())
             # print(line.strip())
 
-    def _read_atom(self, file):
-        x = read_molfile_value(file, 10, conversion=float)
-        y = read_molfile_value(file, 10, conversion=float)
-        z = read_molfile_value(file, 10, conversion=float)
-        read_molfile_value(file, 1)  # empty space
-        symbol = read_molfile_value(file, 3)
-        mass_diff = read_molfile_value(file, 2)
+    def _read_atom(self, input_file):
+        x = read_molfile_value(input_file, 10, conversion=float)
+        y = read_molfile_value(input_file, 10, conversion=float)
+        z = read_molfile_value(input_file, 10, conversion=float)
+        read_molfile_value(input_file, 1)  # empty space
+        symbol = read_molfile_value(input_file, 3)
+        mass_diff = read_molfile_value(input_file, 2)
         charge, multi = self._read_molfile_charge(
-            read_molfile_value(file, 3, conversion=int))
-        file.readline()  # next line please
+            read_molfile_value(input_file, 3, conversion=int))
+        input_file.readline()  # next line please
         ret = self.structure.create_vertex()
         ret.coords = (x, y, z)
         ret.charge = charge
@@ -78,22 +84,21 @@ class molfile(plugin):
         ret.multiplicity = multi
         return ret
 
-    def _read_bond(self, file):
-        a1 = read_molfile_value(file, 3, conversion=int) - \
-            1  # molfiles index from 1
-        a2 = read_molfile_value(file, 3, conversion=int) - 1
-        order = read_molfile_value(file, 3, conversion=int)
-        type = read_molfile_value(file, 3, conversion=int)
+    def _read_bond(self, input_file):
+        # molfiles index from 1
+        a1 = read_molfile_value(input_file, 3, conversion=int) - 1
+        a2 = read_molfile_value(input_file, 3, conversion=int) - 1
+        order = read_molfile_value(input_file, 3, conversion=int)
+        bond_type = read_molfile_value(input_file, 3, conversion=int)
         type_remap = {0: 'n', 1: 'w', 6: 'h', 4: 'a'}
-        type = type_remap.get(type, 'n')
-        file.readline()  # next line please
+        bond_type = type_remap.get(bond_type, 'n')
+        input_file.readline()  # next line please
         b = self.structure.create_edge()
         b.order = order
-        b.type = type
+        b.type = bond_type
         return b, a1, a2
 
     def _read_property(self, prop):
-        import re
         m = re.match("M\s+RAD\s+(\d+)(.*)", prop)
         if m:
             for at, rad in re.findall("(\d+)\s+(\d+)", m.group(2)):
@@ -107,27 +112,29 @@ class molfile(plugin):
                 charge = int(chg)
                 self.structure.vertices[index-1].charge = charge
 
-    def write_file(self, file):
+    def write_file(self, output_file):
         """file should be a writable file object"""
         if not self.structure:
             raise Exception("No structure to write")
-        self._write_header(file)
-        self._write_counts_line(file)
-        self._write_body(file)
-        self._write_m_lines(file)
-        file.write('M  END\n')
+        self._write_header(output_file)
+        self._write_counts_line(output_file)
+        self._write_body(output_file)
+        self._write_m_lines(output_file)
+        output_file.write('M  END\n')
 
     def get_text(self):
-        return ''.join((self._get_header(), self._get_counts_line(), self._get_body(), 'M  END'))
+        return ''.join((
+            self._get_header(), self._get_counts_line(), self._get_body(), 'M  END'
+        ))
 
-    def _write_header(self, file):
-        file.write(self._get_header())
+    def _write_header(self, input_file):
+        input_file.write(self._get_header())
 
     def _get_header(self):
         return "\n\n\n"
 
-    def _write_counts_line(self, file):
-        file.write(self._get_counts_line())
+    def _write_counts_line(self, input_file):
+        input_file.write(self._get_counts_line())
 
     def _get_counts_line(self):
         atoms = len(self.structure.vertices)
@@ -139,11 +146,13 @@ class molfile(plugin):
         obsolete = "  0  0  0  0"
         extras = 999
         mol_version = " V2000"
-        #         1  2 3 4 5 6 7 8 9
-        return "%3d%3d%3d%3d%3d%3d%s%s%s\n" % (atoms, bonds, atom_lists, fff, chiral, stexts, obsolete, extras, mol_version)
+        return "%3d%3d%3d%3d%3d%3d%s%s%s\n" % (
+            atoms, bonds, atom_lists, fff, chiral,
+            stexts, obsolete, extras, mol_version
+        )
 
-    def _write_body(self, file):
-        file.write(self._get_body())
+    def _write_body(self, input_file):
+        input_file.write(self._get_body())
 
     def _get_body(self):
         lines = []
@@ -161,7 +170,6 @@ class molfile(plugin):
         mass_diff = 0
         charge = self._get_molfile_charge(a.charge, a.multiplicity)
         rest = "  0  0  0  0  0  0  0  0  0  0"
-        #            1    2     3     4  5  6 7
         return "%10.4f%10.4f%10.4f %-3s%2d%3d%s" % (x, y, z, symbol, mass_diff, charge, rest)
 
     def _get_bond_line(self, b):
@@ -170,15 +178,14 @@ class molfile(plugin):
         a2 = self.structure.vertices.index(v2) + 1
         order = b.order
         type_remap = {'n': 0, 'w': 1, 'h': 6, 'a': 4, 'b': 0, 'd': 0}
-        type = type_remap.get(b.type, 0)
+        bond_type = type_remap.get(b.type, 0)
         rest = "  0  0  0"
-        #         1  2  3  4 5
-        return "%3d%3d%3d%3d%s" % (a1, a2, order, type, rest)
+        return "%3d%3d%3d%3d%s" % (a1, a2, order, bond_type, rest)
 
-    def _write_m_lines(self, file):
+    def _write_m_lines(self, input_file):
         m_lines = self._get_m_lines()
         if m_lines:
-            file.write("\n".join(m_lines) + "\n")
+            input_file.write("\n".join(m_lines) + "\n")
 
     def _get_m_lines(self):
         # radicals
@@ -216,11 +223,11 @@ class molfile(plugin):
             return 4-charge
 
 
-def read_molfile_value(file, length, strip=1, conversion=None):
+def read_molfile_value(input_file, length, strip=1, conversion=None):
     """reads specified number of characters, if strip strips whitespace,
     if conversion (a fuction taking one string argument) applies it;
     if empty string is obtained after stripping 0 is returned"""
-    str = file.read(length)
+    str = input_file.read(length)
     if strip:
         str = str.strip()
     if str == "":
@@ -230,49 +237,35 @@ def read_molfile_value(file, length, strip=1, conversion=None):
     return str
 
 
-##################################################
-# MODULE INTERFACE
-
-
-try:
-    from io import StringIO
-except ImportError:
-    from io import StringIO
-
 reads_text = 1
 reads_files = 1
 writes_text = 1
 writes_files = 1
 
 
-def mol_to_text(mol):
-    m = molfile()
-    m.structure = mol
-    return m.get_text()
+def mol_to_text(molfile):
+    molfile_object = Molfile()
+    molfile_object.structure = molfile
+    return molfile_object.get_text()
 
 
-def mol_to_file(mol, f):
-    m = molfile()
-    m.structure = mol
-    m.write_file(f)
+def mol_to_file(mol, output_file):
+    molfile_object = Molfile()
+    molfile_object.structure = mol
+    molfile_object.write_file(output_file)
 
 
-def file_to_mol(f):
-    m = molfile()
-    m.read_file(f)
-    return m.structure
+def file_to_mol(input_file):
+    molfile_object = Molfile()
+    molfile_object.read_file(input_file)
+    return molfile_object.structure
 
 
 def text_to_mol(text):
     return file_to_mol(StringIO(text))
 
-# NEW MODULE INTERFACE
 
-
-from .converter_base import converter_base
-
-
-class molfile_converter(converter_base):
+class MolfileConverter(converter_base.ConverterBase):
 
     # standard converter attrs
     reads_text = True
@@ -284,24 +277,24 @@ class molfile_converter(converter_base):
     }
 
     def __init__(self):
-        converter_base.__init__(self)
+        pass
 
     def mols_to_text(self, structures):
-        f = StringIO()
-        self.mols_to_file(structures, f)
-        return f.getvalue()
+        output_file = StringIO()
+        self.mols_to_file(structures, output_file)
+        return output_file.getvalue()
 
     def read_text(self, text):
-        converter_base.read_text(self, text)
+        super().read_text(text)
         mf = StringIO(text)
-        for mol in self.read_file(mf):
+        for molfile in self.read_file(mf):
             yield mol
 
-    def read_file(self, f):
-        converter_base.read_file(self, f)
+    def read_file(self, input_file):
+        super().read_file(input_file)
         chunk = []
-        m = molfile()
-        for line in f:
+        m = Molfile()
+        for line in input_file:
             if line.strip() != "$$$$":
                 chunk.append(line)
             else:
@@ -312,35 +305,24 @@ class molfile_converter(converter_base):
             m.read_file(StringIO("".join(chunk)))
             yield m.structure
 
-    def mols_to_file(self, structures, f):
-        converter_base.mols_to_file(self, structures, f)
-        m = molfile()
-        first = f.tell() == 0
+    def mols_to_file(self, structures, output_file):
+        super().mols_to_file(structures, output_file)
+        molfile_object = Molfile()
+        first = output_file.tell() == 0
         for mol in structures:
             if not first:
-                f.write("$$$$\n")
+                output_file.write("$$$$\n")
             first = False
-            m.structure = mol
-            m.write_file(f)
+            molfile_object.structure = mol
+            molfile_object.write_file(f)
         self.last_status = self.STATUS_OK
-
-
-converter = molfile_converter
-
-
-#
-##################################################
 
 
 if __name__ == "__main__":
 
-    import sys
-
     if len(sys.argv) < 1:
         print("you must supply a filename")
         sys.exit()
-
-    # parsing of the file
 
     file_name = sys.argv[1]
     with open(file_name, 'r') as f:
@@ -348,8 +330,6 @@ if __name__ == "__main__":
 
     for a in mol.atoms:
         print(a.x, a.y)
-
-    import time
 
     t = time.time()
     lens = sorted(map(len, mol.get_smallest_independent_cycles()))
