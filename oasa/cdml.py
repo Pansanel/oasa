@@ -14,31 +14,30 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
+from io import StringIO
+import sys
+import time
 import xml.dom.minidom as dom
 
-from . import smiles
-from . import dom_extensions as dom_ext
-from .plugin import plugin
-from .atom import atom
-from .bond import bond
-from .molecule import molecule
-from .known_groups import cdml_to_smiles
-from .periodic_table import periodic_table as PT
-from .coords_generator import calculate_coords
+from oasa import smiles
+from oasa import dom_extensions as dom_ext
+from oasa import plugin
+from oasa import atom
+from oasa import bond
+from oasa import molecule
+from oasa import known_groups
+from oasa import periodic_table as PT
+from oasa import coords_generator
 
 
 def read_cdml(text):
     """returns the last molecule for now"""
     doc = dom.parseString(text)
-    # if doc.childNodes()[0].nodeName == 'svg':
-    #  path = "/svg/cdml/molecule"
-    # else:
-    #  path = "/cdml/molecule"
     path = "//molecule"
     do_not_continue_this_mol = 0
     for mol_el in dom_ext.simpleXPathSearch(doc, path):
         atom_id_remap = {}
-        mol = molecule()
+        mol = molecule.Molecule()
         groups = []
         for atom_el in dom_ext.simpleXPathSearch(mol_el, "atom"):
             name = atom_el.getAttribute('name')
@@ -50,7 +49,7 @@ def read_cdml(text):
             x = cm_to_float_coord(pos.getAttribute('x'))
             y = cm_to_float_coord(pos.getAttribute('y'))
             z = cm_to_float_coord(pos.getAttribute('z'))
-            if name in PT:
+            if name in PT.periodic_table:
                 # its really an atom
                 a = atom(symbol=name,
                          charge=atom_el.getAttribute('charge') and int(
@@ -95,15 +94,6 @@ def cm_to_float_coord(x):
     else:
         return float(x)
 
-
-##################################################
-# MODULE INTERFACE
-
-try:
-    from io import StringIO
-except ImportError:
-    from io import StringIO
-
 reads_text = 1
 reads_files = 1
 writes_text = 0
@@ -123,28 +113,15 @@ def text_to_mol(text):
     calculate_coords(mol, bond_length=-1)
     return mol
 
-#
-##################################################
-
-
-##################################################
-# DEMO
-
 if __name__ == '__main__':
-
-    import sys
 
     if len(sys.argv) < 1:
         print("you must supply a filename")
         sys.exit()
 
-    # parsing of the file
-
     file_name = sys.argv[1]
     with open(file_name, 'r') as f:
         mol = file_to_mol(f)
-
-    import time
 
     t = time.time()
     lens = sorted(map(len, mol.get_all_cycles()))
@@ -152,18 +129,4 @@ if __name__ == '__main__':
     print(time.time() - t)
     print("total %d rings" % len(lens))
 
-##     mring = mol.get_new_induced_subgraph( ring, mol.vertex_subgraph_to_edge_subgraph( ring))
-# if not mring.is_connected():
-##       print(map( len, [a for a in mring.get_connected_components()]))
-# for vs in mring.get_connected_components():
-##         print([a.symbol for a in vs])
-    #import molfile
-    #print(molfile.mol_to_text( mring))
-
-    #calculate_coords( mol, bond_length=-1)
-
-    # for a in mol.vertices:
-    #  print(a.x, a.y)
-
     print(mol)
-    #print(smiles.mol_to_text( mol))

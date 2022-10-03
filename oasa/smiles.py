@@ -303,15 +303,15 @@ class Smiles(plugin.Plugin):
             d1 = get_stereobond_direction(end_atom1, inside_atom1, bond1, -1)
             d2 = get_stereobond_direction(end_atom2, inside_atom2, bond2, -1)
             if d1 == d2:
-                value = stereochemistry.cis_trans_stereochemistry.SAME_SIDE
+                value = stereochemistry.CisTransStereochemistry.SAME_SIDE
             else:
-                value = stereochemistry.cis_trans_stereochemistry.OPPOSITE_SIDE
+                value = stereochemistry.CisTransStereochemistry.OPPOSITE_SIDE
             if len(path) == 3:
                 center = path[1]
             else:
                 center = None
             refs = [end_atom1, inside_atom1, inside_atom2, end_atom2]
-            st = stereochemistry.cis_trans_stereochemistry(
+            st = stereochemistry.CisTransStereochemistry(
                 center=center, value=value, references=refs)
             mol.add_stereochemistry(st)
 
@@ -330,7 +330,7 @@ class Smiles(plugin.Plugin):
                             hs = mol.explicit_hydrogens_to_real_atoms(v)
                             h = hs.pop()
                         else:
-                            h = stereochemistry.explicit_hydrogen()
+                            h = stereochemistry.ExplicitHydrogen()
                         v_idx = mol.vertices.index(v)
                         idx1 = [i for i in idx if i < v_idx]
                         idx2 = [i for i in idx if i > v_idx]
@@ -342,12 +342,12 @@ class Smiles(plugin.Plugin):
                     pass  # unhandled stereochemistry
             if refs:
                 if v.properties_["stereo"] == "@":
-                    direction = stereochemistry.tetrahedral_stereochemistry.ANTICLOCKWISE
+                    direction = stereochemistry.TetrahedralStereochemistry.ANTICLOCKWISE
                 elif v.properties_['stereo'] == "@@":
-                    direction = stereochemistry.tetrahedral_stereochemistry.CLOCKWISE
+                    direction = stereochemistry.TetrahedralStereochemistry.CLOCKWISE
                 else:
                     continue  # no meaning
-                st = stereochemistry.tetrahedral_stereochemistry(
+                st = stereochemistry.TetrahedralStereochemistry(
                     center=v, value=direction, references=refs)
                 mol.add_stereochemistry(st)
 
@@ -380,7 +380,7 @@ class Smiles(plugin.Plugin):
                     v.properties_['aromatic'] = 1
         # stereochemistry information preparation
         for st in mol.stereochemistry:
-            if isinstance(st, stereochemistry.cis_trans_stereochemistry):
+            if isinstance(st, stereochemistry.CisTransStereochemistry):
                 end1, inside1, inside2, end2 = st.references
                 e1 = end1.get_edge_leading_to(inside1)
                 e2 = end2.get_edge_leading_to(inside2)
@@ -388,7 +388,7 @@ class Smiles(plugin.Plugin):
                     e1, []) + [(e2, st)]
                 self._stereo_bonds_to_others[e2] = self._stereo_bonds_to_others.get(
                     e2, []) + [(e1, st)]
-            elif isinstance(st, stereochemistry.tetrahedral_stereochemistry):
+            elif isinstance(st, stereochemistry.TetrahedralStereochemistry):
                 self._stereo_centers[st.center] = st
             else:
                 pass  # we cannot handle this
@@ -407,7 +407,7 @@ class Smiles(plugin.Plugin):
                     processed_neighbors.append(n)
                 elif v.explicit_hydrogens and n is v:
                     processed_neighbors.append(
-                        stereochemistry.explicit_hydrogen())
+                        stereochemistry.ExplicitHydrogen())
             count = match_atom_lists(st.references, processed_neighbors)
             clockwise = st.value == st.CLOCKWISE
             if count % 2 == 1:

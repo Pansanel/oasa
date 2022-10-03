@@ -20,29 +20,31 @@ import itertools
 from warnings import warn
 from operator import itemgetter
 
-from . import graph
-from . import periodic_table as PT
-from .chem_vertex import chem_vertex
-from .common import is_uniquely_sorted
-from .oasa_exceptions import oasa_invalid_atom_symbol
+from oasa import graph
+from oasa import periodic_table as PT
+from oasa import chem_vertex
+from oasa import common
+from oasa import oasa_exceptions
 
 
-class atom(chem_vertex):
+class Atom(chem_vertex.ChemVertex):
     # ("value","charge","x","y","z","multiplicity","valency","charge","free_sites")
-    attrs_to_copy = chem_vertex.attrs_to_copy + \
+    attrs_to_copy = chem_vertex.ChemVertex.attrs_to_copy + \
         ("symbol", "isotope", "explicit_hydrogens")
 
     def __init__(self, symbol='C', charge=0, coords=None):
-        chem_vertex.__init__(self, coords=coords)
+        super().__init__(coords=coords)
         self.symbol = symbol
         self.charge = charge
         self.isotope = None
         self.explicit_hydrogens = 0
 
     def matches(self, other):
-        if not isinstance(other, atom):
+        if not isinstance(other, Atom):
             return False
-        if self.symbol == other.symbol and self.valency == other.valency and self.multiplicity == other.multiplicity:
+        if self.symbol == other.symbol and \
+                self.valency == other.valency and \
+                self.multiplicity == other.multiplicity:
             # check charge only if other has it set to something non-zero
             if other.charge and self.charge != other.charge:
                 return False
@@ -51,9 +53,7 @@ class atom(chem_vertex):
 
     @property
     def symbol(self):
-        """Atom symbol.
-
-        """
+        """Atom symbol."""
         return self._symbol
 
     @symbol.setter
@@ -63,15 +63,13 @@ class atom(chem_vertex):
             self.valency = PT.periodic_table[symbol]['valency'][0]
             self.symbol_number = PT.periodic_table[symbol]['ord']
         except KeyError:
-            raise oasa_invalid_atom_symbol("invalid atom symbol", symbol)
+            raise oasa_exceptions.OasaInvalidAtomSymbol("invalid atom symbol", symbol)
         self._symbol = symbol
 
-    # Overrides chem_vertex occupied_valency
+    # Overrides ChemVertex occupied_valency
     @property
     def occupied_valency(self):
-        """Atoms occupied valency.
-
-        """
+        """Atoms occupied valency."""
         try:
             return self._cache['occupied_valency']
         except KeyError:
@@ -119,28 +117,23 @@ class atom(chem_vertex):
             # (this fixed thiophene where occupied_valency of S would be computed to be 3
             #  and valency raise would be triggered)
             x = bonds_single_aromatic+charge+self.multiplicity-1+self.explicit_hydrogens
-        #self._cache['occupied_valency'] = x
         return x
 
-    # Overrides chem_vertex multiplicity
+    # Overrides ChemVertex multiplicity
     @property
     def multiplicity(self):
-        """Atom multiplicity.
-
-        """
+        """Atom multiplicity."""
         return self._multiplicity
 
     @multiplicity.setter
     def multiplicity(self, multiplicity):
-        chem_vertex.multiplicity.__set__(self, multiplicity)
+        super().multiplicity(multiplicity)
         if self.free_valency < 0:
             self.raise_valency_to_senseful_value()
 
     @property
     def free_sites(self):
-        """Atoms free_sites.
-
-        """
+        """Atoms free_sites."""
         if self._free_sites > self.free_valency:
             return self.free_valency
         return self._free_sites
@@ -151,23 +144,19 @@ class atom(chem_vertex):
 
     @property
     def isotope(self):
-        """Isotope.
-
-        """
+        """Isotope."""
         return self._isotope
 
     @isotope.setter
     def isotope(self, isotope):
         if isotope is not None and not isinstance(isotope, int):
             # isotope must be a number or None
-            raise oasa_exceptions.oasa_invalid_value("isotope", isotope)
+            raise oasa_exceptions.OasaInvalidValue("isotope", isotope)
         self._isotope = isotope
 
     @property
     def electronegativity(self):
-        """Atom's electronegativity.
-
-        """
+        """Atom's electronegativity."""
         try:
             return PT.periodic_table[self.symbol]['en']
         except KeyError:
@@ -175,12 +164,10 @@ class atom(chem_vertex):
 
     @property
     def oxidation_number(self):
-        """Atom's oxidation number.
-
-        """
+        """Atom's oxidation number."""
         en = self.charge
         for e, n in self.get_neighbor_edge_pairs():
-            if isinstance(n, atom) and n.symbol != self.symbol:
+            if isinstance(n, Atom) and n.symbol != self.symbol:
                 en += e.order * (n.electronegativity >
                                  self.electronegativity and 1 or -1)
         hen = PT.periodic_table['H']['en']
@@ -189,10 +176,10 @@ class atom(chem_vertex):
 
     @property
     def electron_pairs(self):
-        """Number of electron pairs on the atom.
-
-        """
-        return (PT.periodic_table[self.symbol]['els'] - sum([b.order for b in self.neighbor_edges]) - self.charge - self.free_valency - self.multiplicity + 1) / 2.0
+        """Number of electron pairs on the atom."""
+        electron_pairs = (PT.periodic_table[self.symbol]['els'] - sum([b.order for b in self.neighbor_edges]) - \
+                         self.charge - self.free_valency - self.multiplicity + 1) / 2.0
+        return electron_pairs
 
     def __str__(self):
         return "atom '%s'" % str(self.symbol)
@@ -202,7 +189,7 @@ class atom(chem_vertex):
 
         That can be passed to functions in periodic_table.
         """
-        ret = PT.formula_dict(self.symbol)
+        ret = PT.FormulaDict(self.symbol)
         if self.free_valency + self.explicit_hydrogens > 0:
             ret['H'] = self.free_valency + self.explicit_hydrogens
         return ret
@@ -245,7 +232,7 @@ class atom(chem_vertex):
         cips = []
         for a in self.neighbors:
             cips.append([[], a, a.gen_CIP_sequence(came_from=self)])
-        while not is_uniquely_sorted(cips, cip_sorting_function):
+        while not common.is_uniquely_sorted(cips, cip_sorting_function):
             for cip in cips:
                 try:
                     cip[0].append(next(cip[2]).symbol_number)
@@ -262,13 +249,11 @@ class atom(chem_vertex):
         return True
 
     def get_neighbors_CIP_sorted(self):
-        """Return neighbors sorted according to the CIP rules.
-
-        """
+        """Return neighbors sorted according to the CIP rules."""
         cips = []
         for a in self.neighbors:
             cips.append([[], a, a.gen_CIP_sequence(came_from=self)])
-        while not is_uniquely_sorted(cips, cip_sorting_function):
+        while not common.is_uniquely_sorted(cips, cip_sorting_function):
             for cip in cips:
                 try:
                     cip[0].append(next(cip[2]).symbol_number)
@@ -335,7 +320,7 @@ class atom(chem_vertex):
         Takes all aromatic bonds as single, thus giving the maximum free valency
         that would be possible if all these localized to single.
         """
-        return self.valency - chem_vertex.occupied_valency.__get__(self)
+        return self.valency - super().occupied_valency()
 
 
 def cip_sorting_function(a, b):
@@ -345,9 +330,3 @@ def cip_sorting_function(a, b):
         return 1
     elif a[0] > b[0]:
         return -1
-
-
-##################################################
-# TODO
-
-# chirality for those possesing a free electron pair

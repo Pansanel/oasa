@@ -14,17 +14,17 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-class oasa_error(Exception):
+class OasaError(Exception):
 
     def __init__(self, *args, **kw):
         Exception.__init__(self, *args, **kw)
 
 
-class oasa_periodic_table_error(oasa_error):
+class OasaPeriodicTableError(OasaError):
     """exception for reporting periodic_table related error"""
 
     def __init__(self, id, value, symbol=None):
-        oasa_error.__init__(self)
+        OasaError.__init__(self)
         self.id = id
         self.value = value
 
@@ -32,11 +32,11 @@ class oasa_periodic_table_error(oasa_error):
         return "OASA periodic_table error, id=%s, value=%s" % (self.id, self.value)
 
 
-class oasa_invalid_atom_symbol(oasa_error):
+class OasaInvalidAtomSymbol(OasaError):
     """exception for reporting invalid atom symbol use"""
 
     def __init__(self, value, symbol):
-        oasa_error.__init__(self)
+        OasaError.__init__(self)
         self.value = value
         self.symbol = symbol
 
@@ -44,11 +44,11 @@ class oasa_invalid_atom_symbol(oasa_error):
         return "Symbol '%s' not allowed (%s)" % (self.symbol, self.value)
 
 
-class oasa_invalid_value(oasa_error):
+class OasaInvalidValue(OasaError):
     """exception for reporting invalid values"""
 
     def __init__(self, meaning, value):
-        oasa_error.__init__(self)
+        OasaError.__init__(self)
         self.value = value
         self.meaning = meaning
 
@@ -56,10 +56,10 @@ class oasa_invalid_value(oasa_error):
         return "The value for '%s' is not allowed (%s)" % (self.meaning, self.value)
 
 
-class oasa_not_implemented_error(oasa_error):
+class OasaNotImplementedError(OasaError):
 
     def __init__(self, where, what):
-        oasa_error.__init__(self)
+        OasaError.__init__(self)
         self.where = where
         self.what = what
 
@@ -67,40 +67,40 @@ class oasa_not_implemented_error(oasa_error):
         return "'Not implemented' error in %s: %s" % (self.where, self.what)
 
 
-class oasa_inchi_error(oasa_error):
+class OasaInchiError(OasaError):
 
     def __init__(self, what):
-        oasa_error.__init__(self)
+        OasaError.__init__(self)
         self.what = what
 
     def __str__(self):
         return "InChI error: %s" % self.what
 
 
-class oasa_unsupported_inchi_version_error(oasa_error):
+class OasaUnsupportedInchiVersionError(OasaError):
 
     def __init__(self, version):
-        oasa_error.__init__(self)
+        OasaError.__init__(self)
         self.version = version
 
     def __str__(self):
         return "The InChI has an unsupported version: %s" % self.version
 
 
-class oasa_smiles_error(oasa_error):
+class OasaSmilesError(OasaError):
 
     def __init__(self, value):
-        oasa_error.__init__(self)
+        OasaError.__init__(self)
         self.value = value
 
     def __str__(self):
         return "SMILES Error: %s" % self.value
 
 
-class oasa_stereochemistry_error(oasa_error):
+class OasaStereochemistryError(OasaError):
 
     def __init__(self, value):
-        oasa_error.__init__(self)
+        OasaError.__init__(self)
         self.value = value
 
     def __str__(self):

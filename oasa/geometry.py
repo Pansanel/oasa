@@ -24,7 +24,7 @@ import operator
 
 from math import sqrt, atan2, pi, cos, sin
 
-from .misc import signum, normalize_coords
+from oasa import misc, transform3d
 
 
 def find_parallel(x1, y1, x2, y2, d):
@@ -521,8 +521,7 @@ def create_transformation_to_coincide_point_with_z_axis(mov, point):
     with positive 'z'.
     NOTE: this is probably far from efficient, but it works
     """
-    from .transform3d import transform3d
-    t = transform3d()
+    t = transform3d.Transform3D()
     a, b, c = mov
     t.set_move(-a, -b, -c)
     x, y, z = t.transform_xyz(*point)
@@ -573,7 +572,8 @@ def create_transformation_to_rotate_around_particular_axis(line_start, line_end,
     m33 = (w2 + (u2 + v2) * cosT)/l2
     m34 = (c*(u2 + v2) - w*(a*u + b*v)
            + (w*(a*u + b*v) - c*(u2 + v2))*cosT + (a*v - b*u)*l*sinT)/l2
-    from .transform3d import transform3d
-    t = transform3d([[m11, m12, m13, m14], [m21, m22, m23, m24], [
-                    m31, m32, m33, m34], [0, 0, 0, 1]])
+    t = transform3d.Transform3d([
+        [m11, m12, m13, m14], [m21, m22, m23, m24],
+        [m31, m32, m33, m34], [0, 0, 0, 1]
+    ])
     return t

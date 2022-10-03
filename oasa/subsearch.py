@@ -296,7 +296,7 @@ class Substructure(object):
         self.compound_type = compound_type
         self.structure = None
         if smiles_str:
-            self.read_smiles(smiles, atoms_to_ignore=atoms_to_ignore)
+            self.read_smiles(smiles_str, atoms_to_ignore=atoms_to_ignore)
         self.children = []
 
     def __str__(self):

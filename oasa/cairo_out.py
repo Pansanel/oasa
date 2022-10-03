@@ -18,12 +18,13 @@ import copy
 import math
 import cairo
 
-from . import misc
-from . import geometry
-from . import transform3d
+from oasa import misc
+from oasa import geometry
+from oasa import smiles
+from oasa import transform3d
 
 
-class cairo_out(object):
+class CairoOut(object):
     """Draw OASA molecules using cairo.
 
     Cairo supports different 'surfaces' which represent different file formats.
@@ -33,69 +34,89 @@ class cairo_out(object):
 
     Usage:
 
-    c = cairo_out( scaling=2.0, margin=10, font_size=20, bond_width=6)
+    c = CairoOut(scaling=2.0, margin=10, font_size=20, bond_width=6)
     c.show_hydrogens_on_hetero = True
     c.mol_to_cairo( mol, 'outfile.png') # mol is oasa molecule
 
     # attributes can be set in constructor or afterwards as normal attributes
-    # default options are set and described in the cairo_out.default_options dictionary
+    # default options are set and described in the CairoOut.default_options dictionary
     """
 
     _temp_margin = 200
 
-    atom_colors_minimal = {'O': (1, 0, 0),
-                           'N': (0, 0, 1),
-                           'S': (.5, .5, 0),
-                           'Cl': (0, 0.8, 0),
-                           'Br': (.5, 0, 0),
-                           }
+    atom_colors_minimal = {
+        'O': (1, 0, 0),
+        'N': (0, 0, 1),
+        'S': (.5, .5, 0),
+        'Cl': (0, 0.8, 0),
+        'Br': (.5, 0, 0),
+    }
 
-    # taken from: http://bodr.svn.sourceforge.net/viewvc/*checkout*/bodr/trunk/bodr/elements/elements.xml?revision=34&content-type=text%2Fplain
+    # taken from:
+    # https://github.com/BlueObelisk/bodr
     # C and H modified to be black
     # F,S,Cl modified to a darker color (suggested by Toon Verstraelen)
     atom_colors_full = {
         'H': (0.00, 0.00, 0.00), 'He': (0.85, 1.00, 1.00),
-        'Li': (0.80, 0.50, 1.00), 'Be': (0.76, 1.00, 0.00), 'B': (1.00, 0.71, 0.71),
-        'C': (0.0, 0.0, 0.0), 'N': (0.05, 0.05, 1.00), 'O': (1.00, 0.05, 0.05),
-        'F': (0.30, 0.70, 0.70), 'Ne': (0.70, 0.89, 0.96), 'Na': (0.67, 0.36, 0.95),
-        'Mg': (0.54, 1.00, 0.00), 'Al': (0.75, 0.65, 0.65), 'Si': (0.50, 0.60, 0.60),
-        'P': (1.00, 0.50, 0.00), 'S': (0.80, 0.80, 0.20), 'Cl': (0.00, 0.80, 0.00),
-        'Ar': (0.50, 0.82, 0.89), 'K': (0.56, 0.25, 0.83), 'Ca': (0.24, 1.00, 0.00),
-        'Sc': (0.90, 0.90, 0.90), 'Ti': (0.75, 0.76, 0.78), 'V': (0.65, 0.65, 0.67),
-        'Cr': (0.54, 0.60, 0.78), 'Mn': (0.61, 0.48, 0.78), 'Fe': (0.50, 0.48, 0.78),
-        'Co': (0.44, 0.48, 0.78), 'Ni': (0.36, 0.48, 0.76), 'Cu': (1.00, 0.48, 0.38),
-        'Zn': (0.49, 0.50, 0.69), 'Ga': (0.76, 0.56, 0.56), 'Ge': (0.40, 0.56, 0.56),
-        'As': (0.74, 0.50, 0.89), 'Se': (1.00, 0.63, 0.00), 'Br': (0.65, 0.16, 0.16),
-        'Kr': (0.36, 0.72, 0.82), 'Rb': (0.44, 0.18, 0.69), 'Sr': (0.00, 1.00, 0.00),
-        'Y': (0.58, 1.00, 1.00), 'Zr': (0.58, 0.88, 0.88), 'Nb': (0.45, 0.76, 0.79),
-        'Mo': (0.33, 0.71, 0.71), 'Tc': (0.23, 0.62, 0.62), 'Ru': (0.14, 0.56, 0.56),
-        'Rh': (0.04, 0.49, 0.55), 'Pd': (0.00, 0.41, 0.52), 'Ag': (0.88, 0.88, 1.00),
-        'Cd': (1.00, 0.85, 0.56), 'In': (0.65, 0.46, 0.45), 'Sn': (0.40, 0.50, 0.50),
-        'Sb': (0.62, 0.39, 0.71), 'Te': (0.83, 0.48, 0.00), 'I': (0.58, 0.00, 0.58),
-        'Xe': (0.26, 0.62, 0.69), 'Cs': (0.34, 0.09, 0.56), 'Ba': (0.00, 0.79, 0.00),
-        'La': (0.44, 0.83, 1.00), 'Ce': (1.00, 1.00, 0.78), 'Pr': (0.85, 1.00, 0.78),
-        'Nd': (0.78, 1.00, 0.78), 'Pm': (0.64, 1.00, 0.78), 'Sm': (0.56, 1.00, 0.78),
-        'Eu': (0.38, 1.00, 0.78), 'Gd': (0.27, 1.00, 0.78), 'Tb': (0.19, 1.00, 0.78),
-        'Dy': (0.12, 1.00, 0.78), 'Ho': (0.00, 1.00, 0.61), 'Er': (0.00, 0.90, 0.46),
-        'Tm': (0.00, 0.83, 0.32), 'Yb': (0.00, 0.75, 0.22), 'Lu': (0.00, 0.67, 0.14),
-        'Hf': (0.30, 0.76, 1.00), 'Ta': (0.30, 0.65, 1.00), 'W': (0.13, 0.58, 0.84),
-        'Re': (0.15, 0.49, 0.67), 'Os': (0.15, 0.40, 0.59), 'Ir': (0.09, 0.33, 0.53),
-        'Pt': (0.96, 0.93, 0.82), 'Au': (0.80, 0.82, 0.12), 'Hg': (0.71, 0.71, 0.76),
-        'Tl': (0.65, 0.33, 0.30), 'Pb': (0.34, 0.35, 0.38), 'Bi': (0.62, 0.31, 0.71),
-        'Po': (0.67, 0.36, 0.00), 'At': (0.46, 0.31, 0.27), 'Rn': (0.26, 0.51, 0.59),
-        'Fr': (0.26, 0.00, 0.40), 'Ra': (0.00, 0.49, 0.00), 'Ac': (0.44, 0.67, 0.98),
-        'Th': (0.00, 0.73, 1.00), 'Pa': (0.00, 0.63, 1.00), 'U': (0.00, 0.56, 1.00),
-        'Np': (0.00, 0.50, 1.00), 'Pu': (0.00, 0.42, 1.00), 'Am': (0.33, 0.36, 0.95),
-        'Cm': (0.47, 0.36, 0.89), 'Bk': (0.54, 0.31, 0.89), 'Cf': (0.63, 0.21, 0.83),
-        'Es': (0.70, 0.12, 0.83), 'Fm': (0.70, 0.12, 0.73), 'Md': (0.70, 0.05, 0.65),
-        'No': (0.74, 0.05, 0.53), 'Lr': (0.78, 0.00, 0.40), 'Rf': (0.80, 0.00, 0.35),
-        'Db': (0.82, 0.00, 0.31), 'Sg': (0.85, 0.00, 0.27), 'Bh': (0.88, 0.00, 0.22),
-        'Hs': (0.90, 0.00, 0.18), 'Mt': (0.91, 0.00, 0.15), 'Ds': (0.92, 0.00, 0.14),
-        'Rg': (0.93, 0.00, 0.13),
+        'Li': (0.80, 0.50, 1.00), 'Be': (0.76, 1.00, 0.00),
+        'B': (1.00, 0.71, 0.71), 'C': (0.0, 0.0, 0.0),
+        'N': (0.05, 0.05, 1.00), 'O': (1.00, 0.05, 0.05),
+        'F': (0.30, 0.70, 0.70), 'Ne': (0.70, 0.89, 0.96),
+        'Na': (0.67, 0.36, 0.95), 'Mg': (0.54, 1.00, 0.00),
+        'Al': (0.75, 0.65, 0.65), 'Si': (0.50, 0.60, 0.60),
+        'P': (1.00, 0.50, 0.00), 'S': (0.80, 0.80, 0.20),
+        'Cl': (0.00, 0.80, 0.00), 'Ar': (0.50, 0.82, 0.89),
+        'K': (0.56, 0.25, 0.83), 'Ca': (0.24, 1.00, 0.00),
+        'Sc': (0.90, 0.90, 0.90), 'Ti': (0.75, 0.76, 0.78),
+        'V': (0.65, 0.65, 0.67), 'Cr': (0.54, 0.60, 0.78),
+        'Mn': (0.61, 0.48, 0.78), 'Fe': (0.50, 0.48, 0.78),
+        'Co': (0.44, 0.48, 0.78), 'Ni': (0.36, 0.48, 0.76),
+        'Cu': (1.00, 0.48, 0.38), 'Zn': (0.49, 0.50, 0.69),
+        'Ga': (0.76, 0.56, 0.56), 'Ge': (0.40, 0.56, 0.56),
+        'As': (0.74, 0.50, 0.89), 'Se': (1.00, 0.63, 0.00),
+        'Br': (0.65, 0.16, 0.16), 'Kr': (0.36, 0.72, 0.82),
+        'Rb': (0.44, 0.18, 0.69), 'Sr': (0.00, 1.00, 0.00),
+        'Y': (0.58, 1.00, 1.00), 'Zr': (0.58, 0.88, 0.88),
+        'Nb': (0.45, 0.76, 0.79), 'Mo': (0.33, 0.71, 0.71),
+        'Tc': (0.23, 0.62, 0.62), 'Ru': (0.14, 0.56, 0.56),
+        'Rh': (0.04, 0.49, 0.55), 'Pd': (0.00, 0.41, 0.52),
+        'Ag': (0.88, 0.88, 1.00), 'Cd': (1.00, 0.85, 0.56),
+        'In': (0.65, 0.46, 0.45), 'Sn': (0.40, 0.50, 0.50),
+        'Sb': (0.62, 0.39, 0.71), 'Te': (0.83, 0.48, 0.00),
+        'I': (0.58, 0.00, 0.58), 'Xe': (0.26, 0.62, 0.69),
+        'Cs': (0.34, 0.09, 0.56), 'Ba': (0.00, 0.79, 0.00),
+        'La': (0.44, 0.83, 1.00), 'Ce': (1.00, 1.00, 0.78),
+        'Pr': (0.85, 1.00, 0.78), 'Nd': (0.78, 1.00, 0.78),
+        'Pm': (0.64, 1.00, 0.78), 'Sm': (0.56, 1.00, 0.78),
+        'Eu': (0.38, 1.00, 0.78), 'Gd': (0.27, 1.00, 0.78),
+        'Tb': (0.19, 1.00, 0.78), 'Dy': (0.12, 1.00, 0.78),
+        'Ho': (0.00, 1.00, 0.61), 'Er': (0.00, 0.90, 0.46),
+        'Tm': (0.00, 0.83, 0.32), 'Yb': (0.00, 0.75, 0.22),
+        'Lu': (0.00, 0.67, 0.14), 'Hf': (0.30, 0.76, 1.00),
+        'Ta': (0.30, 0.65, 1.00), 'W': (0.13, 0.58, 0.84),
+        'Re': (0.15, 0.49, 0.67), 'Os': (0.15, 0.40, 0.59),
+        'Ir': (0.09, 0.33, 0.53), 'Pt': (0.96, 0.93, 0.82),
+        'Au': (0.80, 0.82, 0.12), 'Hg': (0.71, 0.71, 0.76),
+        'Tl': (0.65, 0.33, 0.30), 'Pb': (0.34, 0.35, 0.38),
+        'Bi': (0.62, 0.31, 0.71), 'Po': (0.67, 0.36, 0.00),
+        'At': (0.46, 0.31, 0.27), 'Rn': (0.26, 0.51, 0.59),
+        'Fr': (0.26, 0.00, 0.40), 'Ra': (0.00, 0.49, 0.00),
+        'Ac': (0.44, 0.67, 0.98), 'Th': (0.00, 0.73, 1.00),
+        'Pa': (0.00, 0.63, 1.00), 'U': (0.00, 0.56, 1.00),
+        'Np': (0.00, 0.50, 1.00), 'Pu': (0.00, 0.42, 1.00),
+        'Am': (0.33, 0.36, 0.95), 'Cm': (0.47, 0.36, 0.89),
+        'Bk': (0.54, 0.31, 0.89), 'Cf': (0.63, 0.21, 0.83),
+        'Es': (0.70, 0.12, 0.83), 'Fm': (0.70, 0.12, 0.73),
+        'Md': (0.70, 0.05, 0.65), 'No': (0.74, 0.05, 0.53),
+        'Lr': (0.78, 0.00, 0.40), 'Rf': (0.80, 0.00, 0.35),
+        'Db': (0.82, 0.00, 0.31), 'Sg': (0.85, 0.00, 0.27),
+        'Bh': (0.88, 0.00, 0.22), 'Hs': (0.90, 0.00, 0.18),
+        'Mt': (0.91, 0.00, 0.15), 'Ds': (0.92, 0.00, 0.14),
+        'Rg': (0.93, 0.00, 0.13)
     }
 
     # all the following values are settable using the constructor, e.g.
-    # cairo_out( margin=20, bond_width=3.0)
+    # CairoOut( margin=20, bond_width=3.0)
     # all metrics is scaled properly, the values corespond to pixels only
     # when scaling is 1.0
     default_options = {
@@ -136,6 +157,7 @@ class cairo_out(object):
     }
 
     def __init__(self, **kw):
+        """Initializes the CairoOut class."""
         for k, v in list(self.__class__.default_options.items()):
             setattr(self, k, v)
         # list of paths that contribute to the bounding box (probably no edges)
@@ -148,28 +170,28 @@ class cairo_out(object):
                 raise Exception(
                     "unknown attribute '%s' passed to constructor" % k)
 
-    def draw_mol(self, mol):
+    def draw_mol(self, mol_data):
         if not self.surface:
             raise Exception(
                 "You must initialize cairo surface before drawing, use 'create_surface' to do it.")
-        self.molecule = mol
-        for v in mol.vertices:
+        self.molecule = mol_data
+        for v in mol_data.vertices:
             self._draw_vertex(v)
-        for e in copy.copy(mol.edges):
+        for e in copy.copy(mol_data.edges):
             self._draw_edge(e)
 
-    def create_surface(self, w, h, format):
+    def create_surface(self, w, h, file_format):
         """currently implements PNG writting, but might be overriden to write other types;
         w and h are minimal estimated width and height"""
         # trick - we use bigger surface and then copy from it to a new surface and crop
-        if format == "png":
+        if file_format == "png":
             self.surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, w, h)
-        elif format == "pdf":
+        elif file_format == "pdf":
             self.surface = cairo.PDFSurface(self.filename, w, h)
-        elif format == "svg":
+        elif file_format == "svg":
             self.surface = cairo.SVGSurface(self.filename, w, h)
         else:
-            raise Exception("unknown format '%s'" % format)
+            raise Exception("unknown format '%s'" % file_format)
 
     def init_surface(self):
         """make all necessary operations to prepare a surface for drawing:
@@ -347,8 +369,8 @@ class cairo_out(object):
 
         # code itself
         # at first detect the need to make 3D adjustments
-        self._transform = transform3d.transform3d()
-        self._invtransform = transform3d.transform3d()
+        self._transform = transform3d.Transform3D()
+        self._invtransform = transform3d.Transform3D()
         transform = None
         if e.order > 1:
             atom1, atom2 = e.vertices
@@ -607,8 +629,9 @@ class cairo_out(object):
         atom1, atom2 = b.vertices
         x1, y1, z1 = atom1.coords
         x2, y2, z2 = atom2.coords
-        t = geometry.create_transformation_to_coincide_point_with_z_axis([x1, y1, z1], [
-                                                                         x2, y2, z2])
+        t = geometry.create_transformation_to_coincide_point_with_z_axis(
+           [x1, y1, z1], [x2, y2, z2]
+        )
         x, y, z = t.transform_xyz(x2, y2, z2)
         # now rotate to make the plane of neighbor atoms coincide with x,y plane
         angs = []
@@ -624,7 +647,6 @@ class cairo_out(object):
         t.set_rotation_y(math.pi/2.0)
         return t
 
-    # ------------------------------ lowlevel drawing methods ------------------------------
     def _draw_colored_line(self, start, end, line_width=1, capstyle=cairo.LINE_CAP_BUTT,
                            start_color=(0, 0, 0), end_color=(0, 0, 0)):
         x1, y1 = start
@@ -823,35 +845,25 @@ class cairo_out(object):
 
 
 def mol_to_png(mol, filename, **kw):
-    c = cairo_out(**kw)
+    c = CairoOut(**kw)
     c.mol_to_cairo(mol, filename)
 
 
 def mols_to_png(mols, filename, **kw):
-    c = cairo_out(**kw)
+    c = CairoOut(**kw)
     c.mols_to_cairo(mols, filename)
 
 
 def mol_to_cairo(mol, filename, format, **kw):
-    c = cairo_out(**kw)
+    c = CairoOut(**kw)
     c.mol_to_cairo(mol, filename, format=format)
 
 
 def mols_to_cairo(mols, filename, format, **kw):
-    c = cairo_out(**kw)
+    c = CairoOut(**kw)
     c.mols_to_cairo(mols, filename, format=format)
 
 
 if __name__ == "__main__":
-
-    from . import smiles
-
     mol = smiles.text_to_mol("FCCSCl", calc_coords=30)
-    #mol.vertices[0].properties_['show_hydrogens'] = False
-    #mol.vertices[1].properties_['show_symbol'] = False
-    #mol.vertices[2].properties_['show_symbol'] = True
     mol_to_png(mol, "output.png", show_hydrogens_on_hetero=True, scaling=2)
-
-##   from . import inchi
-##   mol = inchi.text_to_mol( "1/C7H6O2/c8-7(9)6-4-2-1-3-5-6/h1-5H,(H,8,9)", include_hydrogens=False, calc_coords=30)
-##   mol_to_png( mol, "output.png")

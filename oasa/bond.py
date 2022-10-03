@@ -23,15 +23,12 @@
 
 
 import sys
-sys.path.append('../')
 import math
-
 from warnings import warn
+from oasa.graph import edge
 
-from . import graph
 
-
-class bond(graph.edge, object):
+class Bond(edge.Edge):
     """Based on edge, however the vertices are not a Set anymore.
 
     We need to preserve the order (for instance for wedge bonds).
@@ -43,20 +40,21 @@ class bond(graph.edge, object):
     'b' - bold
     'd' - dash
     """
-    attrs_to_copy = graph.edge.attrs_to_copy + ("order", "aromatic", "type")
+    attrs_to_copy = edge.Edge.attrs_to_copy + ("order", "aromatic", "type")
 
     def __init__(self, vs=[], order=1, type='n'):
-        graph.edge.__init__(self, vs=vs)
+        """Initializes the Bond class."""
+        super().__init__(vs=vs)
         self.set_vertices(vs)
         self.aromatic = None  # None means it was not set
-        self.order = order
+        self._order = order
         self.type = type
         self.properties_ = {}
         self.stereochemistry = None
 
     def __str__(self):
         if self._vertices:
-            return "bond between %s %s" % tuple(map(str, self.vertices))
+            return "bond between %s %s" % tuple(map(str, self._vertices))
         else:
             return "bond, no vertices set"
 
@@ -67,16 +65,12 @@ class bond(graph.edge, object):
 
     @property
     def vertices(self):
-        """Tuple of 2 vertices (start, end).
-
-        """
+        """Tuple of 2 vertices (start, end)."""
         return self._vertices
 
     @vertices.setter
     def vertices(self, vs=[]):
-        """Sets the vertices this edge connects.
-
-        """
+        """Sets the vertices this edge connects."""
         assert len(vs) == 2 or len(vs) == 0
         # if len( vs) == 2 and vs[0] == vs[1]:
         #  warn( "creating bond with both ends equal", UserWarning, 2)
@@ -97,26 +91,18 @@ class bond(graph.edge, object):
 
     @order.setter
     def order(self, order):
-        [a.bond_order_changed() for a in self.vertices]
+        [a.bond_order_changed() for a in self._vertices]
         if order == 4:
             self._order = None
             self.aromatic = 1
         else:
             self._order = order
-            #self.aromatic = None
 
     @property
     def length(self):
-        """Bond length.
-
-        """
-        if len(self.vertices) == 2:
-            v1, v2 = self.vertices
+        """Returns the bond length."""
+        if len(self._vertices) == 2:
+            v1, v2 = self._vertices
             return math.sqrt((v1.x-v2.x)**2 + (v1.y-v2.y)**2)
         else:
             return 0
-
-
-# TODO
-
-# support for the bond.aromatic

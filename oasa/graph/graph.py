@@ -199,9 +199,6 @@ class Graph(object):
             self.edges.add(e)
         self._flush_cache()
 
-    # PROPERTIES METHODS
-    # BOOLEAN
-
     def is_connected(self):
         if len(self.edges) < len(self.vertices) - 1:
             # in this case it cannot be connected
@@ -281,7 +278,6 @@ class Graph(object):
         self.add_edge(v1, v2, e=e)
         return list(map(len, ps))
 
-    # ANALYSIS
     def get_connected_components(self):
         """returns the connected components of graph in a form o list of lists of vertices"""
         comp = set()  # just processed component

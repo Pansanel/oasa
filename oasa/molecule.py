@@ -16,21 +16,23 @@
 
 import copy
 import math
+import time
 
-from . import graph
-from . import common
-from . import misc
-from . import transform3d
-from . import periodic_table as PT
-from .atom import atom
-from .bond import bond
-from .query_atom import query_atom
+from oasa.graph import graph
+from oasa import common
+from oasa import misc
+from oasa import transform3d
+from oasa import periodic_table as PT
+from oasa import atom
+from oasa import bond
+from oasa import query_atom
+from oasa import config
 
-
-class molecule(graph.graph):
+class Molecule(graph.Graph):
 
     def __init__(self, vertices=[]):
-        graph.graph.__init__(self, vertices=vertices)
+        """Initiliaze the Molecule class."""
+        super().__init__(vertices=vertices)
         # aliases
         self.atoms = self.vertices
         self.bonds = self.edges
@@ -41,15 +43,14 @@ class molecule(graph.graph):
 
     def create_vertex(self, vertex_class=None):
         if not vertex_class:
-            return atom()
+            return atom.Atom()
         else:
             return vertex_class()
 
     def create_edge(self):
-        return bond()
+        return bond.Bond()
 
     def create_graph(self):
-        from . import config
         return config.Config.molecule_class()
 
     def add_stereochemistry(self, stereo):
@@ -58,7 +59,8 @@ class molecule(graph.graph):
     def remove_stereochemistry(self, stereo):
         if not stereo in self.stereochemistry:
             raise ValueError(
-                "cannot remove non-existent stereochemistry information")
+                "cannot remove non-existent stereochemistry information"
+            )
         self.stereochemistry.remove(stereo)
 
     def get_stereochemistry_by_center(self, center):
@@ -67,22 +69,18 @@ class molecule(graph.graph):
                 return st
         return None
 
-    # analytics
-
     # override of graphs method to add stereochemistry support
     def get_disconnected_subgraphs(self):
         out = graph.graph.get_disconnected_subgraphs(self)
         for part in out:
             for st in self.stereochemistry:
-                if set([ref for ref in st.references if isinstance(ref, atom)]) <= set(part.vertices):
+                if set([ref for ref in st.references if isinstance(ref, atom.Atom)]) <= set(part.vertices):
                     part.add_stereochemistry(st)
         return out
 
     @property
     def weight(self):
-        """Molecular weight.
-
-        """
+        """Molecular weight."""
         w = 0
         for v in self.vertices:
             w += v.weight
@@ -92,14 +90,12 @@ class molecule(graph.graph):
 
     @property
     def charge(self):
-        """Net charge of the molecule.
-
-        """
+        """Net charge of the molecule."""
         return sum([a.charge for a in self.vertices])
 
     def get_formula_dict(self):
         """returns a formula dict as defined in the periodic_table.py::formula_dict"""
-        comp = PT.formula_dict()
+        comp = PT.FormulaDict()
         for a in self.atoms:
             comp += a.get_formula_dict()
         return comp
@@ -138,11 +134,6 @@ class molecule(graph.graph):
         [v.raise_valency_to_senseful_value()
          for v in self.vertices if v.free_valency < 0]
 
-        #print([sum( [xxx.free_valency for xxx in x]) for x in self._gen_free_valency_connected_components()])
-
-##     print([map( str, n) for n in [v.neighbors for v in self.vertices if v.symbol == "N"]])
-##     print([v.charge for v in self.vertices if v.symbol == "N"])
-
         fix = True
         while fix:
             fix = False
@@ -154,15 +145,6 @@ class molecule(graph.graph):
                             break
                 if fix:
                     break
-
-        #print([v.valency for v in self.vertices if v.symbol == "N"])
-
-# if retry:
-# for ring in self.get_smallest_independent_cycles_e():
-# if not filter( lambda x: x<=0, [v.free_valency for v in self.edge_subgraph_to_vertex_subgraph( ring)]):
-# for e in ring:
-##             e.order = 4
-# self.localize_aromatic_bonds()
 
         # now we process it
         processed = [1]
@@ -442,11 +424,6 @@ class molecule(graph.graph):
                                 b.order = 1
                         i += 1
                     break
-# ensure chemical meaning
-# if sum( comb) == 2*sum( [b.order-1 for b in self.vertex_subgraph_to_edge_subgraph( aring[:-1])]):
-# break
-# else:
-# print("AAAA")
 
         self.localize_fake_aromatic_bonds()
 
@@ -563,7 +540,7 @@ class molecule(graph.graph):
             i += 1
         return ret
 
-    def _read_file(self, name="/home/beda/oasa/oasa/mol.graph"):
+    def _read_file(self, name="mol.graph"):
         self.vertices = []
         self.edges = set()
         with open(name, 'r') as f:
@@ -607,7 +584,6 @@ class molecule(graph.graph):
         for b in zero_bonds:
             self.disconnect_edge(b)
 
-    # --- the fragment matching routines ---
     def select_matching_substructures(self, other, implicit_freesites=False, auto_cleanup=True):
         """select fragments that match the complete molecule 'other' and yield them
         as lists of atoms in the order of other.vertices; however when other has
@@ -620,9 +596,9 @@ class molecule(graph.graph):
         # at first decide if we need to add implicit hydrogens to self
         add_implicit = False
         for v in other.vertices:
-            if (isinstance(v, atom) and v.symbol == 'H') or \
-               (isinstance(v, atom) and v.explicit_hydrogens > 0) or \
-               (isinstance(v, query_atom) and ('H' in v.symbols or 'R' in v.symbols)):
+            if (isinstance(v, atom.Atom) and v.symbol == 'H') or \
+               (isinstance(v, atom.Atom) and v.explicit_hydrogens > 0) or \
+               (isinstance(v, atom.QueryAtom) and ('H' in v.symbols or 'R' in v.symbols)):
                 add_implicit = True
                 break
         if add_implicit:
@@ -654,7 +630,7 @@ class molecule(graph.graph):
         for e in other.edges | self.edges:
             e.properties_['subsearch'] = {}
         # here we select the vertex to start from
-        vs = [v for v in other.vertices if isinstance(v, atom)]
+        vs = [v for v in other.vertices if isinstance(v, atom.Atom)]
         sym = common.least_common_item([v.symbol for v in vs])
         v = [v for v in vs if v.symbol == sym][0]
         for a in self.vertices:
@@ -923,7 +899,7 @@ class molecule(graph.graph):
         scale = bond_length / self.get_mean_bond_length()
         movex = (maxx+minx)/2
         movey = (maxy+miny)/2
-        trans = transform3d.transform3d()
+        trans = transform3d.Transform3D()
         trans.set_move(-movex, -movey, 0)
         trans.set_scaling(scale)
         trans.set_move(movex, movey, 0)
@@ -1006,47 +982,15 @@ def equals(mol1, mol2, level=0):
     return True
 
 
-#import psyco
-# psyco.profile()
-
-##################################################
-# DEMO
-
-
 if __name__ == '__main__':
 
     def main():
-        g = molecule()
+        g = Molecule()
         g._read_file()
 
         for b in g.edges:
             print(g.is_edge_a_bridge(b), end='')
 
-# g.add_missing_hydrogens()
-
-# for v in g.vertices:
-# print(v.symbol, v.is_chiral())
-# if v.symbol:
-# for a in v.get_neighbors_CIP_sorted():
-# print(a, [na.symbol for na in a.neighbors])
-# if v.is_chiral():
-##           print(v.symbol, [na.symbol for na in v.get_neighbors_CIP_sorted()])
-
-    import time
     t = time.time()
     main()
     print(round(1000*(time.time()-t), 2), 'ms')
-
-# DEMO END
-##################################################
-
-
-##################################################
-# TODO
-
-# azulene is wrongly localized
-# 0,2 must alternate in aromatic compound
-# radical has 1 el in _get_atoms_possible_aromatic_electrons
-# test the equals function
-
-##################################################

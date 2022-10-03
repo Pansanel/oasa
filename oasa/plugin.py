@@ -14,25 +14,25 @@
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
 
-class plugin(object):
-    """Basic plugin interface.
+class Plugin(object):
+    """Basic plugin interface."""
 
-    """
     name = "plugin"
     read = 0
     write = 0
 
     def __init__(self):
+        """Initilizes the Plugin class."""
         pass
 
     def set_structure(self, structure):
         pass
 
-    def get_structure(self, structure):
+    def get_structure(self):
         pass
 
-    def read_file(self, file):
+    def read_file(self, input_file):
         pass
 
-    def write_file(self, file):
+    def write_file(self, output_file):
         pass

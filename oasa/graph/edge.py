@@ -22,12 +22,12 @@ class Edge(object):
     attrs_to_copy = ("disconnected",)
 
     def __init__(self, vs=None):
-        self.vertices = []
+        self._vertices = []
         if vs is None:
             vs = []
         self.set_vertices(vs)
         self.properties_ = {}
-        self.disconnected = False
+        self._disconnected = False
 
     def __str__(self):
         return "edge between %s %s" % tuple(map(str, self.vertices))
@@ -44,31 +44,29 @@ class Edge(object):
         if vs is None:
             vs = []
         if vs and len(vs) == 2:
-            self.vertices = list(vs)
+            self._vertices = list(vs)
 
     def get_vertices(self):
-        return self.vertices
+        return self._vertices
 
     @property
     def neighbor_edges(self):
-        v1, v2 = self.vertices
+        v1, v2 = self._vertices
         out1 = [e for e in v1.neighbor_edges if e != self]
         out2 = [e for e in v2.neighbor_edges if e != self]
         return out1 + out2
 
     def get_neighbor_edges2(self):
-        """Return 2 lists of neighbor edges (one for one side, one for the other).
-
-        """
-        v1, v2 = self.vertices
+        """Return 2 lists of neighbor edges (one for one side, one for the other)."""
+        v1, v2 = self._vertices
         out1 = [e for e in v1.neighbor_edges if e != self]
         out2 = [e for e in v2.neighbor_edges if e != self]
         return out1, out2
 
     @property
     def disconnected(self):
-        return self.disconnected
+        return self._disconnected
 
     @disconnected.setter
     def disconnected(self, d):
-        self.disconnected = d
+        self._disconnected = d

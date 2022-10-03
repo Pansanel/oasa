@@ -18,22 +18,21 @@ import copy
 
 from warnings import warn
 
-import oasa.graph
+from oasa.graph import vertex
 import oasa.periodic_table as PT
-from oasa.common import is_uniquely_sorted
 
 
-class chem_vertex(graph.vertex):
+class ChemVertex(vertex.Vertex):
     """Parent class of atoms, groups etc.
 
     It defines common properties for vertices used in chemical context.
     It should not be instantiated directly, but rather inherited from.
     """
-    attrs_to_copy = graph.vertex.attrs_to_copy + \
+    attrs_to_copy = vertex.Vertex.attrs_to_copy + \
         ("charge", "x", "y", "z", "multiplicity", "valency", "charge", "free_sites")
 
     def __init__(self, coords=None):
-        graph.vertex.__init__(self)
+        super().__init__()
         self.charge = 0
         self.free_sites = 0
         # None means not set (used)
@@ -52,9 +51,7 @@ class chem_vertex(graph.vertex):
 
     @property
     def coords(self):
-        """Atom coordinates.
-
-        """
+        """Atom coordinates."""
         return self.x, self.y, self.z
 
     @coords.setter
@@ -69,9 +66,7 @@ class chem_vertex(graph.vertex):
 
     @property
     def charge(self):
-        """Atom charge.
-
-        """
+        """Atom charge."""
         return self._charge
 
     @charge.setter
@@ -81,9 +76,7 @@ class chem_vertex(graph.vertex):
 
     @property
     def multiplicity(self):
-        """Atom multiplicity.
-
-        """
+        """Return the atom multiplicity."""
         return self._multiplicity
 
     @multiplicity.setter
@@ -93,9 +86,7 @@ class chem_vertex(graph.vertex):
 
     @property
     def valency(self):
-        """Atom valency.
-
-        """
+        """Returns the atom valency."""
         return self._valency
 
     @valency.setter
@@ -105,9 +96,7 @@ class chem_vertex(graph.vertex):
 
     @property
     def occupied_valency(self):
-        """Atom's occupied valency.
-
-        """
+        """Atom's occupied valency."""
         i = 0
         for b in list(self._neighbors.keys()):
             ord = b.order
@@ -118,9 +107,7 @@ class chem_vertex(graph.vertex):
 
     @property
     def free_valency(self):
-        """Atom's free valency.
-
-        """
+        """Atom's free valency."""
         try:
             return self._cache['free_valency']
         except KeyError:
@@ -130,9 +117,7 @@ class chem_vertex(graph.vertex):
 
     @property
     def weight(self):
-        """Atom weight.
-
-        """
+        """Atom weight."""
         try:
             return PT.periodic_table[self.symbol]['weight']
         except:
@@ -140,9 +125,7 @@ class chem_vertex(graph.vertex):
 
     @property
     def free_sites(self):
-        """Atom's free sites.
-
-        """
+        """Atom's free sites."""
         really_free = self._free_sites - self.occupied_valency
         if really_free < 0:
             return 0

@@ -13,16 +13,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, see <http://www.gnu.org/licenses/>
 
-from . import molecule
+from oasa import molecule
 
 
 class Config (object):
-    """Singleton class for library wide configuration.
-
-    """
+    """Singleton class for library wide configuration."""
     inchi_binary_path = "/usr/bin/inchi-1"
 
-    molecule_class = molecule.molecule
+    molecule_class = molecule.Molecule
 
     @classmethod
     def create_molecule(self):

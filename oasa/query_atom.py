@@ -26,7 +26,7 @@ from oasa import periodic_table as PT
 
 class QueryAtom(chem_vertex.ChemVertex):
 
-    attrs_to_copy = super().attrs_to_copy + ("symbols",)
+    attrs_to_copy = chem_vertex.ChemVertex.attrs_to_copy + ("symbols",)
 
     def __init__(self, coords=None):
         """Initiliazes the QueryAtom class."""
@@ -39,8 +39,6 @@ class QueryAtom(chem_vertex.ChemVertex):
     def matches(self, other):
         if not isinstance(other, atom.Atom):
             return False
-        # if isinstance( other, query_atom):
-        #  raise ValueError, "query atoms on the recieving side are not supported"
         # halogens
         for sym in self.symbols:
             if sym == other.symbol:
